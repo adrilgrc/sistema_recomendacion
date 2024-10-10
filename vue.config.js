@@ -1,5 +1,6 @@
 const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true,
-  disableHostCheck: true,
+  host: '0.0.0.0',   // Permite que el servidor esté disponible externamente
+  allowedHosts: 'all' // Permite todas las conexiones externas
 })
