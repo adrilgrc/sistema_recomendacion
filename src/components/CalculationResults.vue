@@ -3,10 +3,11 @@
     <h3>Resultados de Cálculo</h3>
     <p>Métrica seleccionada: <strong>{{ selectedMetric }}</strong></p>
     <p>Tipo de predicción seleccionado: <strong>{{ selectedPredictionType }}</strong></p>
-    
+
     <div v-if="fileContent" class="file-output">
       <h4>Contenido del archivo:</h4>
       <pre>{{ fileContent }}</pre>
+      <h4>Correlación de Pearson: <strong>{{ pearsonCorrelation }}</strong></h4>
     </div>
     
     <div v-else>
@@ -29,6 +30,56 @@ export default {
     fileContent: {
       type: String,
       default: ''
+    }
+  },
+  data() {
+    return {
+      pearsonCorrelation: null
+    };
+  },
+  watch: {
+    fileContent(newContent) {
+      if (newContent) {
+        this.calculatePearsonCorrelation(newContent);
+      }
+    }
+  },
+  methods: {
+    // Función para parsear los datos y calcular la correlación de Pearson
+    calculatePearsonCorrelation(content) {
+      // Asumiendo que el contenido es un CSV con dos columnas separadas por comas
+      const rows = content.trim().split('\n');
+      const xValues = [];
+      const yValues = [];
+      
+      rows.forEach(row => {
+        const [x, y] = row.split(',').map(Number); // Parsear los valores a números
+        xValues.push(x);
+        yValues.push(y);
+      });
+
+      const n = xValues.length;
+      if (n !== yValues.length || n === 0) {
+        this.pearsonCorrelation = 'Error en los datos';
+        return;
+      }
+
+      const sumX = xValues.reduce((a, b) => a + b, 0);
+      const sumY = yValues.reduce((a, b) => a + b, 0);
+      const sumXY = xValues.reduce((sum, x, i) => sum + x * yValues[i], 0);
+      const sumX2 = xValues.reduce((sum, x) => sum + x * x, 0);
+      const sumY2 = yValues.reduce((sum, y) => sum + y * y, 0);
+
+      const numerator = (n * sumXY) - (sumX * sumY);
+      const denominator = Math.sqrt(
+        (n * sumX2 - Math.pow(sumX, 2)) * (n * sumY2 - Math.pow(sumY, 2))
+      );
+
+      if (denominator === 0) {
+        this.pearsonCorrelation = 'División por cero';
+      } else {
+        this.pearsonCorrelation = (numerator / denominator).toFixed(4);
+      }
     }
   }
 };

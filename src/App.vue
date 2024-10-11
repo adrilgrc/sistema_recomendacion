@@ -8,7 +8,7 @@
     </div>
 
     <CalculationResults 
-      v-if="selectedMetric || selectedPredictionType" 
+      v-if="selectedMetric || selectedPredictionType || fileContent" 
       :selectedMetric="selectedMetric" 
       :selectedPredictionType="selectedPredictionType" 
       :fileContent="fileContent" 
