@@ -18,6 +18,7 @@
 </template>
 
 <script>
+
 // Importamos los componentes
 import FileReader from './components/FileReader.vue';
 import RecommendationMenu from './components/RecommendationMenu.vue';
