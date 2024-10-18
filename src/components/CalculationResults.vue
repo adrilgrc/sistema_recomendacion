@@ -4,9 +4,10 @@
     <p>Métrica seleccionada: <strong>{{ selectedMetric }}</strong></p>
 
     <div v-if="fileContent">
-      <component :is="currentComponent" :content="fileContent" />
+      <component :is="currentComponent" :content="fileContent" @matrixComputed="updateMatrices" />
     </div>
-    
+  
+
     <div v-else>
       <p>No hay contenido del archivo disponible.</p>
     </div>
@@ -29,6 +30,12 @@ export default {
       default: ''
     }
   },
+  data() {
+    return {
+      utilityMatrix: [],
+      pearsonMatrix: []
+    };
+  },
   computed: {
     currentComponent() {
       switch (this.selectedMetric) {
@@ -47,6 +54,12 @@ export default {
     PearsonCorrelation,
     CosineDistance,
     EuclideanDistance
+  },
+  methods: {
+    updateMatrices({ utilityMatrix, pearsonMatrix }) {
+      this.utilityMatrix = utilityMatrix;
+      this.pearsonMatrix = pearsonMatrix;
+    }
   }
 };
 </script>

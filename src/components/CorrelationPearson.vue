@@ -78,6 +78,12 @@ export default {
         }
       }
       this.matrix = matrix;
+
+       // Emite el evento cuando la matriz de Pearson está calculada
+      this.$emit('matrixComputed', {
+        utilityMatrix: userRows,   // Esta es la matriz de utilidad (ratings)
+        pearsonMatrix: this.matrix // Esta es la matriz de Pearson (similitud)
+      });
     }
   }
 };
