@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h4>Matriz de Distancia Coseno</h4>
-    <table v-if="cosineMatrix.length">
+    <h4 v-if="flag">Alguno de los valores de la matriz de similitud está fuera del rango permitido</h4>
+    <h4 v-if="!flag">Matriz de Distancia Coseno</h4>
+    <table v-if="!flag && cosineMatrix.length">
       <thead>
         <tr>
           <th>Usuario</th>
@@ -28,7 +29,8 @@ export default {
   },
   data() {
     return {
-      cosineMatrix: []
+      cosineMatrix: [],
+      flag: false
     };
   },
   mounted() {
@@ -36,16 +38,26 @@ export default {
   },
   methods: {
     calculateCosineDistance() {
+      this.flag = false; // Reiniciar el flag de forma que entiendo que todos los valores son validos en este momento
       const rows = this.content.trim().split('\n');
-      const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val === '-' ? null : Number(val))));
+      const minValue = Number(rows[0].trim());
+      const maxValue = Number(rows[1].trim());
+
+      const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val.trim() === '-' ? null : Number(val))));
+
       const numUsers = userRows.length;
       const matrix = Array.from({ length: numUsers }, () => Array(numUsers).fill(0));
 
       const calculateCosine = (xValues, yValues) => {
+        // validar que los valores no sean null, no sean menores a minValue o mayores a maxValue
+        if (xValues.some(val => val !== null && (val < minValue || val > maxValue)) || yValues.some(val => val !== null && (val < minValue || val > maxValue))) {
+          this.flag = true;
+          return null;
+        }
         const validPairs = xValues.map((x, i) => [x, yValues[i]]).filter(([x, y]) => x !== null && y !== null);
-        
+
         if (validPairs.length === 0) return null; // Si no hay pares válidos
-        
+
         const dotProduct = validPairs.reduce((sum, [x, y]) => sum + x * y, 0);
         const magnitudeX = Math.sqrt(validPairs.reduce((sum, [x]) => sum + x * x, 0));
         const magnitudeY = Math.sqrt(validPairs.reduce((sum, [, y]) => sum + y * y, 0));
@@ -61,13 +73,18 @@ export default {
         for (let j = i; j < numUsers; j++) {
           if (i === j) {
             matrix[i][j] = 0; // Distancia de un usuario consigo mismo es 0
+          } else if (matrix[i][j] < -1 || matrix[i][j] > 1) {
+            matrix[i][j] = null;
+            matrix[j][i] = null;
           } else {
             const distance = calculateCosine(userRows[i], userRows[j]);
+            // console.log(`Distancia entre usuario ${i + 1} y usuario ${j + 1}: ${distance}`);
             matrix[i][j] = distance;
             matrix[j][i] = distance; // Simetría en la matriz
           }
         }
       }
+      this.flag = matrix.some(row => row.some(value => value === null));
       this.cosineMatrix = matrix;
     }
   }
