@@ -12,8 +12,10 @@
       :selectedMetric="selectedMetric" 
       :selectedPredictionType="selectedPredictionType" 
       :fileContent="fileContent" 
-      :numNeighbors="numNeighbors" 
+      :numNeighbors="numNeighbors || 1" 
     />
+
+
   </div>
 </template>
 
@@ -36,11 +38,16 @@ export default {
       selectedMetric: "", // Almacena la métrica seleccionada
       selectedPredictionType: "", // Almacena el tipo de predicción seleccionado
       fileContent: '', // Almacena el contenido del archivo
-      numNeighbors: null, // Almacena el número de vecinos
+      numNeighbors: 1, // Inicializa con 1 como valor predeterminado
     };
   },
   methods: {
     updateMetrics(metric, predictionType, neighbors) {
+
+      console.log('Métrica recibida:', metric); // Depuración
+      console.log('Número de vecinos recibido:', neighbors); // Depuración
+      console.log('Tipo de predicción recibido:', predictionType); // Depuración
+
       // Actualiza las métricas seleccionadas
       this.selectedMetric = metric;
       this.selectedPredictionType = predictionType;

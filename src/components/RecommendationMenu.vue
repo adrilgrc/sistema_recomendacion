@@ -18,8 +18,9 @@
       class="custom-input" 
       min="1" 
       placeholder="Ingresa el número de vecinos"
-      @change="emitSelection"
+      @input="emitSelection" 
     />
+
 
     <label for="predictionType">Tipo de predicción:</label>
     <select v-model="selectedPredictionType" id="predictionType" class="custom-select" @change="emitSelection">
@@ -49,6 +50,9 @@ export default {
   methods: {
     emitSelection() {
       // Emitir evento con las selecciones actuales
+      console.log('Métrica seleccionada:', this.selectedMetric); // Para depuración
+      console.log('Número de vecinos:', this.numNeighbors); // Para depuración
+      console.log('Tipo de predicción:', this.selectedPredictionType); // Para depuración
       this.$emit('updateMetrics', this.selectedMetric, this.selectedPredictionType, this.numNeighbors);
     }
   },

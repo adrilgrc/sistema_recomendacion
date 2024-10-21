@@ -41,7 +41,7 @@ export default {
       const maxValue = Number(rows[1].trim());
       
       
-      const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val === '-' ? null : Number(val))));
+      const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val.trim() === '-' ? null : Number(val))));
       const numUsers = userRows.length;
       const matrix = Array.from({ length: numUsers }, () => Array(numUsers).fill(0));
 
