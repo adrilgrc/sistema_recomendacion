@@ -24,8 +24,8 @@
     <label for="predictionType">Tipo de predicción:</label>
     <select v-model="selectedPredictionType" id="predictionType" class="custom-select" @change="emitSelection">
       <option disabled value="">Selecciona un tipo de predicción</option>
-      <option value="simple">5. Predicción simple</option>
-      <option value="meanDifference">6. Diferencia con la media</option>
+      <option value="simple">1. Predicción simple</option>
+      <option value="meanDifference">2. Diferencia con la media</option>
     </select>
 
     <div class="output">

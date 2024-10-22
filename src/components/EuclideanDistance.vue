@@ -47,6 +47,12 @@ export default {
       // Create an array of arrays of user values. Each row is a user content.
       // Split each row by spaces and convert values to an array of numbers. If a value is '-', convert it to null.
       const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val.trim() === '-' ? null : Number(val))));
+      // quitar el ultimo elemento si es un string vacio de cada userRow
+      userRows.forEach(row => {
+        if (row[row.length - 1] == ' ') {
+          row.pop();
+        }
+      });
       // Set number of users
       const numUsers = userRows.length;
       // Create a matrix of zeros
@@ -67,6 +73,10 @@ export default {
 
       this.flag = matrix.some(row => row.some(value => value === null));
       this.euclideanMatrix = matrix;
+      this.$emit('matrixComputed', {
+        utilityMatrix: userRows,   
+        euclideanMatrix: this.euclideanMatrix 
+      });
     },
     euclideanSimilarityByPair(userAValues, userBValues, minValue, maxValue) {
       // Check if any value is outside the range. If so, return null and set the flag to true so the error message is shown in the DOM.
@@ -87,4 +97,18 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  border: 1px solid #dee2e6;
+  padding: 8px;
+  text-align: center;
+}
+</style>
 

@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h4>Matriz de Similitud de Correlación de Pearson</h4>
-    <table v-if="matrix.length">
+    <h4 v-if="flag">Alguno de los valores de la matriz de similitud está fuera del rango permitido</h4>
+    <h4 v-if="!flag">Matriz de Similitud de Correlación de Pearson</h4>
+    <table v-if="!flag && matrix.length">
       <thead>
         <tr>
           <th>Usuario</th>
@@ -42,10 +43,21 @@ export default {
       
       
       const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val.trim() === '-' ? null : Number(val))));
+      // quitar el ultimo elemento si es un string vacio de cada userRow
+      userRows.forEach(row => {
+        if (row[row.length - 1] == ' ') {
+          row.pop();
+        }
+      });
       const numUsers = userRows.length;
       const matrix = Array.from({ length: numUsers }, () => Array(numUsers).fill(0));
 
       const calculatePearson = (xValues, yValues) => {
+        if (xValues.some(val => val !== null && (val < minValue || val > maxValue)) || yValues.some(val => val !== null && (val < minValue || val > maxValue))) {
+          this.flag = true;
+          return null;
+        }
+
         const validPairs = xValues.map((x, i) => [x, yValues[i]]).filter(([x, y]) => x !== null && y !== null);
         if (validPairs.length < 2) return null;
         

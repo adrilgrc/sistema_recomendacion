@@ -7,10 +7,18 @@
       <!-- Muestra el componente para calcular y mostrar la matriz de similitud -->
       <component :is="currentComponent" :content="fileContent" @matrixComputed="updateMatrices" />
 
-      <!-- Muestra el componente para calcular las predicciones después de la matriz de similitud -->
+      <!-- Muestra el componente para calcular las predicción simple después de la matriz de similitud -->
       <div v-if="utilityMatrix.length && similarityMatrix.length && selectedPredictionType ==='simple'">
         <SimplePrediction :utilityMatrix="utilityMatrix" :similarityMatrix="similarityMatrix" :numNeighbors="numNeighbors" />
       </div>
+
+      <!-- Muestra el componente para calcular las predicción diferencia con la media después de la matriz de similitud -->
+      <div v-if="utilityMatrix.length && similarityMatrix.length && selectedPredictionType ==='meanDifference'">
+        <!-- Componente DifferenceAverage.vue -->
+        <DifferenceAverage :utilityMatrix="utilityMatrix" :similarityMatrix="similarityMatrix" :numNeighbors="numNeighbors" />
+      </div>
+
+      
     </div>
 
     <div v-else>
@@ -24,6 +32,7 @@ import PearsonCorrelation from '@/components/CorrelationPearson.vue';
 import CosineDistance from '@/components/CosineDistance.vue';
 import EuclideanDistance from '@/components/EuclideanDistance.vue';
 import SimplePrediction from '@/components/SimplePrediction.vue';
+import DifferenceAverage from '@/components/DifferenceAverage.vue';
 
 export default {
   props: {
@@ -68,7 +77,8 @@ export default {
     PearsonCorrelation,
     CosineDistance,
     EuclideanDistance,
-    SimplePrediction
+    SimplePrediction,
+    DifferenceAverage
   },
   methods: {
     updateMatrices({ utilityMatrix, pearsonMatrix, cosineMatrix, euclideanMatrix }) {

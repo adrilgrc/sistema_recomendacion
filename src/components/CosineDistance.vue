@@ -44,6 +44,12 @@ export default {
       const maxValue = Number(rows[1].trim());
 
       const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val.trim() === '-' ? null : Number(val))));
+      // quitar el ultimo elemento si es un string vacio de cada userRow
+      userRows.forEach(row => {
+        if (row[row.length - 1] == ' ') {
+          row.pop();
+        }
+      });
 
       const numUsers = userRows.length;
       const matrix = Array.from({ length: numUsers }, () => Array(numUsers).fill(0));
@@ -54,6 +60,21 @@ export default {
           this.flag = true;
           return null;
         }
+
+        // if (xValues.length !== yValues.length) {
+        //   this.flag = true;
+        //   return null;
+        // }
+
+        // if (xValues.length !== yValues.length) {
+        //   const diff = Math.abs(xValues.length - yValues.length);
+        //   if (xValues.length > yValues.length) {
+        //     yValues = yValues.concat(Array(diff).fill(null));
+        //   } else {
+        //     xValues = xValues.concat(Array(diff).fill(null));
+        //   }
+        // }
+
         const validPairs = xValues.map((x, i) => [x, yValues[i]]).filter(([x, y]) => x !== null && y !== null);
 
         if (validPairs.length === 0) return null; // Si no hay pares válidos
@@ -65,9 +86,10 @@ export default {
         if (magnitudeX === 0 || magnitudeY === 0) return null; // Para evitar división por cero
         
         const cosineSimilarity = dotProduct / (magnitudeX * magnitudeY);
+        
+
         return (cosineSimilarity); // La distancia coseno
       };
-
       // Calcular la matriz de distancia coseno para todos los pares de usuarios
       for (let i = 0; i < numUsers; i++) {
         for (let j = i; j < numUsers; j++) {
@@ -78,6 +100,9 @@ export default {
             matrix[j][i] = null;
           } else {
             const distance = calculateCosine(userRows[i], userRows[j]);
+            console.log(`Distancia entre usuario ${i + 1} y usuario ${j + 1}: ${distance}`);
+            console.log("Tamaño userRows[i]: ", userRows[i].length);
+            console.log("Tamaño userRows[j]: ", userRows[j].length);
             // console.log(`Distancia entre usuario ${i + 1} y usuario ${j + 1}: ${distance}`);
             matrix[i][j] = distance;
             matrix[j][i] = distance; // Simetría en la matriz
