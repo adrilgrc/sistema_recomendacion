@@ -65,14 +65,14 @@ export default {
         if (magnitudeX === 0 || magnitudeY === 0) return null; // Para evitar división por cero
         
         const cosineSimilarity = dotProduct / (magnitudeX * magnitudeY);
-        return (1 - cosineSimilarity); // La distancia coseno
+        return (cosineSimilarity); // La distancia coseno
       };
 
       // Calcular la matriz de distancia coseno para todos los pares de usuarios
       for (let i = 0; i < numUsers; i++) {
         for (let j = i; j < numUsers; j++) {
           if (i === j) {
-            matrix[i][j] = 0; // Distancia de un usuario consigo mismo es 0
+            matrix[i][j] = 1; // Distancia de un usuario consigo mismo es 1
           } else if (matrix[i][j] < -1 || matrix[i][j] > 1) {
             matrix[i][j] = null;
             matrix[j][i] = null;
@@ -86,6 +86,11 @@ export default {
       }
       this.flag = matrix.some(row => row.some(value => value === null));
       this.cosineMatrix = matrix;
+
+      this.$emit('matrixComputed', {
+        utilityMatrix: userRows,   
+        cosineMatrix: this.cosineMatrix 
+      });
     }
   }
 };
