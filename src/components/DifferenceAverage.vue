@@ -1,8 +1,20 @@
 <template>
   <div>
+    <!-- Mensaje de error si el número de vecinos no es válido -->
     <h4 v-if="flag">No es un número válido de vecinos</h4>
+
+    <!-- Mostrar el título de la predicción si no hay error -->
     <h4 v-if="!flag">Predicción Diferencia con la Media</h4>
+
+    <!-- Mostrar/ocultar botón si hay predicciones y no hay error -->
     <div v-if="!flag && prediction.length">
+      <button @click="toggleTable">
+        {{ showTable ? 'Ocultar' : 'Mostrar' }} Predicciones
+      </button>
+    </div>
+
+    <!-- Mostrar la tabla de predicciones solo si se ha pulsado el botón y hay predicciones -->
+    <div v-if="showTable && !flag && prediction.length">
       <table>
         <thead>
           <tr>
@@ -23,9 +35,7 @@
         </tbody>
       </table>
     </div>
-    <div v-else>
-      <p>No hay predicciones disponibles.</p>
-    </div>
+
   </div>
 </template>
 
@@ -40,32 +50,34 @@ export default {
       type: Array,
       required: true
     },
-		similarityMatrix: {
-			type: Array,
-			required: true
-		}
+    similarityMatrix: {
+      type: Array,
+      required: true
+    }
   },
   data() {
     return {
       prediction: [],
-      flag: false
+      flag: false,
+      showTable: false // Controla si la tabla debe mostrarse o no
     };
   },
   mounted() {
     this.calculateDifferenceAveragePrediction();
   },
   methods: {
+    // Alternar la visibilidad de la tabla
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
+
+    // Método para calcular la predicción usando diferencia con la media
     calculateDifferenceAveragePrediction() {
       if (this.numNeighbors <= 0 || !this.isNumeric(this.numNeighbors) || this.numNeighbors > this.utilityMatrix.length - 1) {
-        // this.flag = ("El número de vecinos debe ser mayor a 0.");
         this.flag = true;
         return null;
       }
-      // console.log("Matriz de utilidad: ");
-      // console.table(this.utilityMatrix);
-      // console.log("Matriz de similitud: ");
-      // console.table(this.similarityMatrix);
-      // console.log("Vecinos: ", this.numNeighbors);
+
       const numUsers = this.utilityMatrix.length;
       const numItems = this.utilityMatrix[0].length;
       const prediction = Array.from({ length: numUsers }, () => Array(numItems).fill(0));
@@ -77,36 +89,38 @@ export default {
             prediction[i][j] = this.utilityMatrix[i][j];
             continue;
           }
-        const neighbors = this.similarityMatrix[i]
-          .map((similarity, u) => ({ similarity, user: u }))
-          .filter(({ similarity, user }) => similarity !== null && i !== user) 
-          .sort((a, b) => b.similarity - a.similarity)
-          .slice(0, this.numNeighbors);
 
-        const sumSimilarities = neighbors.reduce((acc, { similarity }) => acc + Math.abs(similarity), 0);
-        const sumRatings = neighbors.reduce((acc, { similarity, user }) => acc + similarity * (this.utilityMatrix[user][j] - this.AverageUser(user)), 0);
+          const neighbors = this.similarityMatrix[i]
+            .map((similarity, u) => ({ similarity, user: u }))
+            .filter(({ similarity, user }) => similarity !== null && i !== user)
+            .sort((a, b) => b.similarity - a.similarity)
+            .slice(0, this.numNeighbors);
 
-        prediction[i][j] = this.AverageUser(i) + (sumSimilarities !== 0 ? sumRatings / sumSimilarities : 0);
+          const sumSimilarities = neighbors.reduce((acc, { similarity }) => acc + Math.abs(similarity), 0);
+          const sumRatings = neighbors.reduce((acc, { similarity, user }) => acc + similarity * (this.utilityMatrix[user][j] - this.AverageUser(user)), 0);
 
+          prediction[i][j] = this.AverageUser(i) + (sumSimilarities !== 0 ? sumRatings / sumSimilarities : 0);
         }
       }
+
       this.prediction = prediction;
-      // console.log("Predicciones: ");
-      // console.table(prediction);
     },
-    isNumeric(value) {
-      return !isNaN(parseFloat(value)) && isFinite(value);
-    },
+
+    // Método para calcular la media del usuario
     AverageUser(userIndex) {
       const userRatings = this.utilityMatrix[userIndex];
       const ratedItems = userRatings.filter((rating) => rating !== null);
       const mean = ratedItems.reduce((sum, rating) => sum + rating, 0) / ratedItems.length;
       return mean;
+    },
+
+    // Método para verificar si el valor es numérico
+    isNumeric(value) {
+      return !isNaN(parseFloat(value)) && isFinite(value);
     }
   }
 };
 </script>
-
 
 <style scoped>
 table {

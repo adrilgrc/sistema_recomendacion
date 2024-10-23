@@ -124,8 +124,12 @@ export default {
         return;
       }
 
-      // Crear un texto que contenga la matriz de similitud
-      let matrixText = 'Matriz de Similitud:\n';
+      // Incluir información adicional
+      let matrixText = `Métrica: ${this.selectedMetric || 'Ninguna seleccionada'}\n`;
+      matrixText += `Número de vecinos: ${this.numNeighbors || 'No especificado'}\n`;
+      matrixText += `Predicción: ${this.selectedPredictionType || 'Ninguna seleccionada'}\n\n`;
+      matrixText += 'Matriz de Similitud:\n';
+      
       this.similarityMatrix.forEach((row, rowIndex) => {
         matrixText += `Usuario ${rowIndex + 1}: `;
         matrixText += row.map(value => (value !== null ? value.toFixed(4) : 'N/A')).join(' | ');

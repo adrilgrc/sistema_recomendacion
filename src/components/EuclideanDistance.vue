@@ -1,21 +1,41 @@
 <template>
   <div>
+    <!-- Mensaje de error si alguno de los valores está fuera del rango permitido -->
     <h4 v-if="flag">Alguno de los valores de la matriz de similitud está fuera del rango permitido</h4>
+
+    <!-- Título de la matriz de similitud -->
     <h4 v-if="!flag">Matriz de Distancia Euclídea</h4>
-    <table v-if="!flag && euclideanMatrix.length">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th v-for="(user, index) in euclideanMatrix.length" :key="index">Usuario {{ index + 1 }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, rowIndex) in euclideanMatrix" :key="rowIndex">
-          <td>Usuario {{ rowIndex + 1 }}</td>
-          <td v-for="(value, colIndex) in row" :key="colIndex">{{ value !== null ? value.toFixed(4) : 'N/A' }}</td>
-        </tr>
-      </tbody>
-    </table>
+
+    <!-- Botón para mostrar/ocultar la tabla si no hay error y la matriz está disponible -->
+    <div v-if="!flag && euclideanMatrix.length">
+      <button @click="toggleTable">
+        {{ showTable ? 'Ocultar' : 'Mostrar' }} Matriz
+      </button>
+    </div>
+
+    <!-- Mostrar la tabla de similitud solo si se ha pulsado el botón y hay matriz -->
+    <div v-if="showTable && !flag && euclideanMatrix.length">
+      <table>
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <!-- Generar encabezados dinámicamente para los usuarios -->
+            <th v-for="(user, index) in euclideanMatrix.length" :key="index">Usuario {{ index + 1 }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Filas para cada usuario -->
+          <tr v-for="(row, rowIndex) in euclideanMatrix" :key="rowIndex">
+            <td>Usuario {{ rowIndex + 1 }}</td>
+            <!-- Celdas para cada valor de la matriz de similitud -->
+            <td v-for="(value, colIndex) in row" :key="colIndex">
+              {{ value !== null ? value.toFixed(4) : 'N/A' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </template>
 
@@ -29,14 +49,21 @@ export default {
   },
   data() {
     return {
-      euclideanMatrix: [],
-      flag: true
-    }
+      euclideanMatrix: [],  // Matriz de distancia Euclídea
+      flag: true,           // Indica si hay un error en los valores
+      showTable: false      // Controla si la tabla debe mostrarse o no
+    };
   },
   mounted() {
     this.calculateEuclideanDistance();
   },
   methods: {
+    // Alternar la visibilidad de la tabla
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
+
+    // Método para calcular la matriz de distancia Euclídea
     calculateEuclideanDistance() {
       // Split content by rows
       const rows = this.content.trim().split('\n');
@@ -45,54 +72,56 @@ export default {
       const maxValue = Number(rows[1].trim());
 
       // Create an array of arrays of user values. Each row is a user content.
-      // Split each row by spaces and convert values to an array of numbers. If a value is '-', convert it to null.
       const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val.trim() === '-' ? null : Number(val))));
-      // quitar el ultimo elemento si es un string vacio de cada userRow
+      
       userRows.forEach(row => {
-        if (row[row.length - 1] == ' ') {
+        if (row[row.length - 1] === ' ') {
           row.pop();
         }
       });
-      // Set number of users
+
       const numUsers = userRows.length;
-      // Create a matrix of zeros
       const matrix = Array.from({ length: numUsers }, () => Array(numUsers).fill(0));
 
       // Calculate euclidean distance for each pair of users.
       for (let i = 0; i < numUsers; i++) {
         for (let j = i; j < numUsers; j++) {
           if (i === j) {
-            matrix[i][j] = 0; // The distance between a user and itself is 0
+            matrix[i][j] = 0; // La distancia entre un usuario y sí mismo es 0
           } else {
             const distance = this.euclideanSimilarityByPair(userRows[i], userRows[j], minValue, maxValue);
             matrix[i][j] = distance;
-            matrix[j][i] = distance; // Ensure the matrix is symmetric
+            matrix[j][i] = distance; // Asegurar que la matriz sea simétrica
           }
         }
       }
 
       this.flag = matrix.some(row => row.some(value => value === null));
       this.euclideanMatrix = matrix;
+
+      // Emitir el evento cuando la matriz de distancia Euclídea esté calculada
       this.$emit('matrixComputed', {
         utilityMatrix: userRows,   
         euclideanMatrix: this.euclideanMatrix 
       });
     },
+
+    // Método para calcular la distancia Euclídea entre dos usuarios
     euclideanSimilarityByPair(userAValues, userBValues, minValue, maxValue) {
-      // Check if any value is outside the range. If so, return null and set the flag to true so the error message is shown in the DOM.
+      // Verificar si algún valor está fuera del rango
       if (userAValues.some(val => val !== null && (val < minValue || val > maxValue)) || userBValues.some(val => val !== null && (val < minValue || val > maxValue))) {
         this.flag = true;
         return null;
       }
-      // Filter out null values and create a list of pairs of values.
+
+      // Filtrar los valores válidos (no nulos) y formar pares
       const validPairs = userAValues.map((x, i) => [x, userBValues[i]]).filter(([x, y]) => x !== null && y !== null);
 
       if (validPairs.length === 0) return null; // Si no hay pares válidos
-      
-      // Calculate the euclidean distance between the two users by the formula:
-      // sqrt(sum((a - b)^2)) where a and b are the values of the pair of users.
+
+      // Calcular la distancia Euclídea entre los dos usuarios
       const sumPairs = validPairs.reduce((sum, [a, b]) => sum + Math.pow((a - b), 2), 0);
-      return Math.sqrt(sumPairs)
+      return Math.sqrt(sumPairs);
     }
   }
 };
@@ -111,4 +140,3 @@ th, td {
   text-align: center;
 }
 </style>
-
