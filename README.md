@@ -40,8 +40,8 @@ Una vez en el navegador web:
 -- Distancia euclídea
 - Se debe introducir el número de vecinos (3)
 - Se debe seleccionar el tipo de predicción (4) de las opciones posibles:
--- Predicción simple
--- Diferencia con la media
+  - Predicción simple
+  - Diferencia con la media
   
 En el recuadro (5) se mostrará las opciones elegidas, es decir, la métrica seleccionada, número de vecinos y el tipo de predicción.
 
