@@ -48,7 +48,8 @@ export default {
 	data() {
     return {
       prediction: [],
-      flag: false
+      flag: false,
+      neighbors: []
     };	
 	},
 	mounted() {
@@ -82,7 +83,7 @@ export default {
 						.filter(({ similarity, user }) => similarity !== null && i !== user) 
 						.sort((a, b) => b.similarity - a.similarity)
 						.slice(0, this.numNeighbors);
-
+          this.neighbors = neighbors
 					const sumSimilarities = neighbors.reduce((acc, { similarity }) => acc + Math.abs(similarity), 0);
 					const sumRatings = neighbors.reduce((acc, { similarity, user }) => acc + similarity * this.utilityMatrix[user][j], 0);
 
