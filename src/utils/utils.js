@@ -8,7 +8,7 @@ export function parseInputData(content) {
   
   // Quitar el último elemento si es un string vacío de cada userRow
   userRows.forEach(row => {
-    if (row[row.length - 1] === ' ') {
+    if (row[row.length - 1] == ' ') {
       row.pop();
     }
   });

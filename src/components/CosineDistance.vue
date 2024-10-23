@@ -1,27 +1,21 @@
 <template>
   <div>
-    <h4 v-if="flag">Alguno de los valores de la matriz de similitud está fuera del rango permitido</h4>
-    <h4 v-if="!flag">Matriz de Distancia Coseno</h4>
-    <table v-if="!flag && cosineMatrix.length">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th v-for="(user, index) in cosineMatrix.length" :key="index">Usuario {{ index + 1 }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, rowIndex) in cosineMatrix" :key="rowIndex">
-          <td>Usuario {{ rowIndex + 1 }}</td>
-          <td v-for="(value, colIndex) in row" :key="colIndex">{{ value !== null ? value.toFixed(4) : 'N/A' }}</td>
-        </tr>
-      </tbody>
-    </table>
+    <MatrixDisplay
+      :matrix="cosineMatrix"
+      :flag="flag"
+      title="Matriz de Distancia Coseno"
+    />
   </div>
 </template>
 
 <script>
 import { parseInputData } from '@/utils/utils'; 
+import MatrixDisplay from '@/components/MatrixDisplay.vue';
+
 export default {
+  components: {
+    MatrixDisplay
+  },
   props: {
     content: {
       type: String,
