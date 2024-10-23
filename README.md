@@ -45,7 +45,7 @@ Una vez en el navegador web:
   
 En el recuadro (5) se mostrará las opciones elegidas, es decir, la métrica seleccionada, número de vecinos y el tipo de predicción.
 
-[!EjemploUso](/ejemplouso.png)](https://nodesource.com/products/nsolid)
+[!EjemploUso](/ejemplouso.png)](/ejemplouso.png)
 
 Si se han proporcionado adecuadamente todos los datos requeridos, en la parte inferior, se mostrarán una serie de botones:
 - Para decidir si mostrar u ocultar la matriz resultante con la métrica seleccionada (6)
