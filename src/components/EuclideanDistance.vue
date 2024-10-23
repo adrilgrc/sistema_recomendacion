@@ -39,6 +39,7 @@ export default {
   },
   methods: {
     calculateEuclideanDistance() {
+      this.flag = false; // Reset the flag so I understand that all values are valid at this point
       const { minValue, maxValue, userRows } = parseInputData(this.content);
       // Set number of users
       const numUsers = userRows.length;

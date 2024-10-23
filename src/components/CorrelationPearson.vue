@@ -34,11 +34,13 @@ export default {
   },
   methods: {
     calculatePearsonCorrelation() {
-     // Usar la función de utilidades
+      this.flag = false; // Reiniciar el flag de forma que entiendo que todos los valores son validos en este momento
+      // Usar la función de utilidades
       const { minValue, maxValue, userRows } = parseInputData(this.content);
       const numUsers = userRows.length;
       const matrix = Array.from({ length: numUsers }, () => Array(numUsers).fill(0));
 
+      
       const calculatePearson = (xValues, yValues) => {
         if (xValues.some(val => val !== null && (val < minValue || val > maxValue)) || yValues.some(val => val !== null && (val < minValue || val > maxValue))) {
           this.flag = true;
