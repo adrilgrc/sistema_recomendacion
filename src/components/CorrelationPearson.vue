@@ -20,6 +20,8 @@
 </template>
 
 <script>
+
+import { parseInputData } from '@/utils/utils'; 
 export default {
   props: {
     content: {
@@ -37,18 +39,8 @@ export default {
   },
   methods: {
     calculatePearsonCorrelation() {
-      const rows = this.content.trim().split('\n');
-      const minValue = Number(rows[0].trim());
-      const maxValue = Number(rows[1].trim());
-      
-      
-      const userRows = rows.slice(2).map(row => row.split(' ').map(val => (val.trim() === '-' ? null : Number(val))));
-      // quitar el ultimo elemento si es un string vacio de cada userRow
-      userRows.forEach(row => {
-        if (row[row.length - 1] == ' ') {
-          row.pop();
-        }
-      });
+     // Usar la función de utilidades
+      const { minValue, maxValue, userRows } = parseInputData(this.content);
       const numUsers = userRows.length;
       const matrix = Array.from({ length: numUsers }, () => Array(numUsers).fill(0));
 
