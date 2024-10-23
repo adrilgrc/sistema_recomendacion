@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       euclideanMatrix: [],
-      flag: true
+      flag: false
     }
   },
   mounted() {
