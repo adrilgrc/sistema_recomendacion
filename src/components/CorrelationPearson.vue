@@ -25,7 +25,8 @@ export default {
   },
   data() {
     return {
-      matrix: []
+      matrix: [],
+      flag: false,
     };
   },
   mounted() {
@@ -76,6 +77,7 @@ export default {
         }
       }
       this.matrix = matrix;
+      this.flag = matrix.some(row => row.some(value => value === null));
 
       // Emite el evento cuando la matriz de Pearson está calculada
       this.$emit('matrixComputed', {
