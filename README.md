@@ -136,12 +136,15 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
   -  **Methods**:
     - *toggleTable*: Alterna el valor de *showTable* entre true y false, controlando la visibilidad de la tabla.
     - *calculatePearsonCorrelation*: Calcula la matriz de similitud de Pearson en función de la matriz de utilidad.
-      - Utiliza *parseInputData()* para desglosar el contenido en sus valores mínimos (*minValue*), máximos (*maxValue*) y filas de usuarios (*userRows*).
-      - Itera sobre *userRows* para calcular las correlaciones entre cada par de usuarios. La correlación se calcula solo si los valores están dentro del rango permitido (definido por *minValue* y *maxValue*).
+      - Se comienza reseteando la varaible *flag* para indicar que todas las valoraciones son válidas inicialmente.
+      - Se extraen los datos necesarios mediante la función *parseInputData()*, con el objetivo de obtener el valor mínimos (*minValue*), máximo (*maxValue*) y las filas de usuarios (*userRows*), donde cada fila contiene las valoraciones de un usuario determinado.
+      - El número de usuarios (*numUsers*) se obtiene a partir del número de elementos de *userRows*.
+        - Con dicho número, se crea una matriz de ceros, de dimensiones *numUsers* x *numUsers*, llamada *matrix*, que almacenará la similitud entre los distintos usuarios (las distancias).
+      - Se itera sobre *userRows* para calcular las correlaciones entre cada par de usuarios. La correlación se calcula solo si los valores están dentro del rango permitido (definido por *minValue* y *maxValue*).
       - Almacena la correlación entre cada par de usuarios en la matriz, siendo 1 para la diagonal (correlación de cada usuario consigo mismo).
       - Si el denominador es 0 o si hay valores fuera de rango, el valor en la matriz se define como `null`, y *flag* se activa.
       - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *matrix* como la matriz de similitud de Pearson.
-
+  
 ### CosineDistance
 - Es responsable de calcular y mostrar la matriz de similitud basada en la distancia coseno a partir de los datos de entrada proporcionados en una matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
 - Posee una estructura muy similar a *CorrelationPearson*, así que se resaltarán las diferencias:
