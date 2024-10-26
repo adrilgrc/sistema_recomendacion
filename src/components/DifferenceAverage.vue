@@ -67,19 +67,14 @@ export default {
     },
     calculateDifferenceAveragePrediction() {
       if (this.numNeighbors <= 0 || !this.isNumeric(this.numNeighbors) || this.numNeighbors > this.utilityMatrix.length - 1) {
-        // this.flag = ("El número de vecinos debe ser mayor a 0.");
         this.flag = true;
         return null;
       }
-      // console.log("Matriz de utilidad: ");
-      // console.table(this.utilityMatrix);
-      // console.log("Matriz de similitud: ");
-      // console.table(this.similarityMatrix);
-      // console.log("Vecinos: ", this.numNeighbors);
+
       const numUsers = this.utilityMatrix.length;
       const numItems = this.utilityMatrix[0].length;
       const prediction = Array.from({ length: numUsers }, () => Array(numItems).fill(0));
-
+      const pares = [];
       for (let i = 0; i < numUsers; i++) {
         for (let j = 0; j < numItems; j++) {
           // Si el usuario ya ha calificado el ítem, no es necesario predecir
@@ -97,12 +92,13 @@ export default {
         const sumRatings = neighbors.reduce((acc, { similarity, user }) => acc + similarity * (this.utilityMatrix[user][j] - this.AverageUser(user)), 0);
 
         prediction[i][j] = this.AverageUser(i) + (sumSimilarities !== 0 ? sumRatings / sumSimilarities : 0);
-
+        if (sumRatings !== 0) {
+            pares.push([i, neighbors, sumRatings, sumSimilarities, prediction[i][j], j, this.AverageUser(i)]);
+          }
         }
       }
       this.prediction = prediction;
-      // console.log("Predicciones: ");
-      // console.table(prediction);
+      this.$emit('prediction', this.prediction, pares);
     },
     isNumeric(value) {
       return !isNaN(parseFloat(value)) && isFinite(value);
@@ -130,4 +126,67 @@ th, td {
   padding: 8px;
   text-align: center;
 }
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db; /* Color de fondo azul */
+  color: #fff; /* Texto en blanco */
+  font-size: 16px;
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor a puntero */
+  transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+}
+
+.custom-file-upload:hover {
+  background-color: #2980b9; /* Color de fondo más oscuro cuando el ratón está encima */
+}
+
+/* Estilos del contenedor y del input de archivo */
+.file-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none; /* Ocultar input de archivo */
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #2980b9;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  border-color: #3498db;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.file-output {
+  margin-top: 20px;
+  text-align: left;
+}
+
 </style>

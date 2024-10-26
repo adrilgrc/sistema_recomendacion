@@ -1,13 +1,6 @@
 <template>
-  
-  <!-- Botón para mostrar/ocultar la tabla si no hay error y la matriz está disponible -->
-  <div v-if="!flag && matrix.length">
-    <button @click="toggleTable">
-      {{ showTable ? 'Ocultar' : 'Mostrar' }} Matriz
-    </button>
-  </div>
 
-  <div v-if="showTable">
+  <div v-if="!flag && matrix.length">
     <MatrixDisplay
       :matrix="matrix"
       :flag="flag"
@@ -38,18 +31,13 @@ export default {
     return {
       matrix: [],
       flag: false,
-      showTable: false // Controla si la tabla debe mostrarse o no
     };
   },
   mounted() {
     this.calculatePearsonCorrelation();
   },
   methods: {
-    // Alternar la visibilidad de la tabla
-    toggleTable() {
-      this.showTable = !this.showTable;
-    },
-    
+  
     calculatePearsonCorrelation() {
       this.flag = false; // Reiniciar el flag de forma que entiendo que todos los valores son validos en este momento
       // Usar la función de utilidades
@@ -63,19 +51,27 @@ export default {
           this.flag = true;
           return null;
         }
-
+        
         const validPairs = xValues.map((x, i) => [x, yValues[i]]).filter(([x, y]) => x !== null && y !== null);
-        if (validPairs.length < 2) return null;
+        if (validPairs.length === 0) return null;
         
         const n = validPairs.length;
+        console.log("N: ", n);
         const sumX = validPairs.reduce((acc, [x]) => acc + x, 0);
         const sumY = validPairs.reduce((acc, [, y]) => acc + y, 0);
         const sumXY = validPairs.reduce((acc, [x, y]) => acc + x * y, 0);
         const sumX2 = validPairs.reduce((acc, [x]) => acc + x * x, 0);
         const sumY2 = validPairs.reduce((acc, [, y]) => acc + y * y, 0);
-        
+        console.log("SumX: ", sumX);
+        console.log("SumY: ", sumY);
+        console.log("SumXY: ", sumXY);
+        console.log("SumX2: ", sumX2);
+        console.log("SumY2: ", sumY2);
+
         const numerator = n * sumXY - sumX * sumY;
         const denominator = Math.sqrt((n * sumX2 - sumX ** 2) * (n * sumY2 - sumY ** 2));
+        console.log("Numerator: ", numerator);
+        console.log("Denominator: ", denominator);
         if (denominator === 0) return null;
         return numerator / denominator;
       };
@@ -85,18 +81,21 @@ export default {
 
           if (i === j) {
             matrix[i][j] = 1;
-          } else if (matrix[i][j] < minValue && matrix[i][j] > maxValue) {
+          } else if (matrix[i][j] < -1 || matrix[i][j] > 1) {
+            console.log("Matrix[i][j]: ", matrix[i][j]);
             matrix[i][j] = null;
             matrix[j][i] = null;
           } else {
             const correlation = calculatePearson(userRows[i], userRows[j]);
+            console.log("Correlation: ", correlation);
+            console.log("Calculatedpearson: ", calculatePearson(userRows[i], userRows[j]));
             matrix[i][j] = correlation;
             matrix[j][i] = correlation;
           }
         }
       }
       this.matrix = matrix;
-      this.flag = matrix.some(row => row.some(value => value === null));
+      // this.flag = matrix.some(row => row.some(value => value === null));
 
       // Emite el evento cuando la matriz de Pearson está calculada
       this.$emit('matrixComputed', {

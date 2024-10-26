@@ -1,35 +1,21 @@
 <template>
-  <div>
-    <h4 v-if="flag">Alguno de los valores de la matriz de similitud está fuera del rango permitido</h4>
-    <h4 v-if="!flag">Matriz de Distancia Euclídea</h4>
-
-    <!-- Botón para mostrar/ocultar la tabla si no hay error y la matriz está disponible -->
-    <div v-if="!flag && euclideanMatrix.length">
-      <button @click="toggleTable">
-        {{ showTable ? 'Ocultar' : 'Mostrar' }} Matriz
-      </button>
-    </div>
-
-    <table v-if="showTable && !flag && euclideanMatrix.length">
-      <thead>
-        <tr>
-          <th>Usuario</th>
-          <th v-for="(user, index) in euclideanMatrix.length" :key="index">Usuario {{ index + 1 }}</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(row, rowIndex) in euclideanMatrix" :key="rowIndex">
-          <td>Usuario {{ rowIndex + 1 }}</td>
-          <td v-for="(value, colIndex) in row" :key="colIndex">{{ value !== null ? value.toFixed(4) : 'N/A' }}</td>
-        </tr>
-      </tbody>
-    </table>
+  <div v-if="!flag && euclideanMatrix.length">
+    <MatrixDisplay
+      :matrix="euclideanMatrix"
+      :flag="flag"
+      title="Matriz de Distancia Euclídea"
+    />
   </div>
 </template>
 
 <script>
-import { parseInputData } from '@/utils/utils'; 
+import { parseInputData } from '@/utils/utils';
+import MatrixDisplay from '@/components/MatrixDisplay.vue';
+
 export default {
+  components: {
+    MatrixDisplay
+  },
   props: {
     content: {
       type: String,
@@ -112,5 +98,70 @@ th, td {
   padding: 8px;
   text-align: center;
 }
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db; /* Color de fondo azul */
+  color: #fff; /* Texto en blanco */
+  font-size: 16px;
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor a puntero */
+  transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+}
+
+.custom-file-upload:hover {
+  background-color: #2980b9; /* Color de fondo más oscuro cuando el ratón está encima */
+}
+
+/* Estilos del contenedor y del input de archivo */
+.file-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none; /* Ocultar input de archivo */
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #2980b9;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  border-color: #3498db;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.file-output {
+  margin-top: 20px;
+  text-align: left;
+}
+
+
+
 </style>
 

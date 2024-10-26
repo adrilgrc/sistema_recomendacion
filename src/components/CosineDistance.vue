@@ -1,11 +1,6 @@
 <template>
-  <div v-if="!flag && matrix.length">
-    <button @click="toggleTable">
-      {{ showTable ? 'Ocultar' : 'Mostrar' }} Matriz
-    </button>
-  </div>
-  
-  <div v-if="showTable">
+
+  <div v-if="!flag && cosineMatrix.length">
     <MatrixDisplay
       :matrix="cosineMatrix"
       :flag="flag"
@@ -32,17 +27,12 @@ export default {
     return {
       cosineMatrix: [],
       flag: false,
-      showTable: false // Controla si la tabla debe mostrarse o no
     };
   },
   mounted() {
     this.calculateCosineDistance();
   },
   methods: {
-    // Alternar la visibilidad de la tabla
-    toggleTable() {
-      this.showTable = !this.showTable;
-    },
     
     calculateCosineDistance() {
       this.flag = false; // Reiniciar el flag de forma que entiendo que todos los valores son validos en este momento
@@ -58,20 +48,6 @@ export default {
           this.flag = true;
           return null;
         }
-
-        // if (xValues.length !== yValues.length) {
-        //   this.flag = true;
-        //   return null;
-        // }
-
-        // if (xValues.length !== yValues.length) {
-        //   const diff = Math.abs(xValues.length - yValues.length);
-        //   if (xValues.length > yValues.length) {
-        //     yValues = yValues.concat(Array(diff).fill(null));
-        //   } else {
-        //     xValues = xValues.concat(Array(diff).fill(null));
-        //   }
-        // }
 
         const validPairs = xValues.map((x, i) => [x, yValues[i]]).filter(([x, y]) => x !== null && y !== null);
 
@@ -98,10 +74,6 @@ export default {
             matrix[j][i] = null;
           } else {
             const distance = calculateCosine(userRows[i], userRows[j]);
-            console.log(`Distancia entre usuario ${i + 1} y usuario ${j + 1}: ${distance}`);
-            console.log("Tamaño userRows[i]: ", userRows[i].length);
-            console.log("Tamaño userRows[j]: ", userRows[j].length);
-            // console.log(`Distancia entre usuario ${i + 1} y usuario ${j + 1}: ${distance}`);
             matrix[i][j] = distance;
             matrix[j][i] = distance; // Simetría en la matriz
           }
