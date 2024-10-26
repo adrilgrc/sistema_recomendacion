@@ -75,8 +75,23 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
       - *fileContent*: Recibe el contenido del archivo que ha sido cargado, es decir, la matriz de utilidad.
       - *numNeighbors*: Define el número de vecinos que se van a considerar en el cálculo de predicciones.
       - *selectedPredictionType*: Especifica el tipo de predicción que se debe realizar ("simple" o "meanDifference"). Es importante para elegir qué tipo de predicción aplicar a los datos una vez calculada la matriz de similitud.
-        
-  -En **Methods**
+
+  - En **Data** se encuentran las variables internas del componente que se inicializan cuando éste se crea.
+      - *utilityMatrix*: Es un array vacío, se inicializará al cargar el componente. Contendrá la matriz de utilidad.
+      - *similarityMatrix*: Es un array vacío, se inicializará al cargar el componente. Contendrá la matriz de similitud.
+
+  - En **Computed** se establecen las propiedades computadas, es decir, aquellos valores derivados que dependen de otras propiedades y que se actualizan automáticamente cuando cambian sus dependencias.
+      - *selectedMetric*: El switch permite, en función del valor de selectedMetric, seleccionar el componente correspondiente:
+        - Si es 'pearson', devuelve el componente 'PearsonCorrelation'.
+        - Si es 'cosine', devuelve el componente 'CosineDistance'.
+        - Si es 'euclidean', devuelve el componente 'EuclideanDistance'.
+        - Si no coincide con ninguno de estos valores, devuelve null, lo que significa que no se selecciona ningún componente de los contemplados.
+  - En **Components**: Se define una lista de componentes importados que el componente actual utilizará en la plantilla.
+  - En **Methods**: Se definen los métodos del componente.
+      - *updateMatrices*: El método se encarga de actualizar las matrices de utilidad y similitud y emite un evento (*matrixUpdated*) al componente padre, pasando *utilityMatrix* y *similarityMatrix*.
+      - *downloadSimilarityMatrix*: Muestra cuál es la métrica elegida, el número de vecinos, tipo de predicción, la matriz de similitud y los vecinos seleccionados para cada usuario, junto con las valoraciones para cada uno de los ítems, en un archivo .txt.
+
+
 
 - Los estilos (*style*):
   - ..............
