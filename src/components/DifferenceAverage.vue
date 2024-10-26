@@ -2,7 +2,15 @@
   <div>
     <h4 v-if="flag">No es un número válido de vecinos</h4>
     <h4 v-if="!flag">Predicción Diferencia con la Media</h4>
+
+    <!-- Mostrar/ocultar botón si hay predicciones y no hay error -->
     <div v-if="!flag && prediction.length">
+      <button @click="toggleTable">
+        {{ showTable ? 'Ocultar' : 'Mostrar' }} Predicciones
+      </button>
+    </div>
+
+    <div v-if="showTable && !flag && prediction.length">
       <table>
         <thead>
           <tr>
@@ -22,9 +30,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div v-else>
-      <p>No hay predicciones disponibles.</p>
     </div>
   </div>
 </template>
@@ -48,13 +53,18 @@ export default {
   data() {
     return {
       prediction: [],
-      flag: false
+      flag: false,
+      showTable: false // Controla si la tabla debe mostrarse o no
     };
   },
   mounted() {
     this.calculateDifferenceAveragePrediction();
   },
   methods: {
+    // Alternar la visibilidad de la tabla
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
     calculateDifferenceAveragePrediction() {
       if (this.numNeighbors <= 0 || !this.isNumeric(this.numNeighbors) || this.numNeighbors > this.utilityMatrix.length - 1) {
         // this.flag = ("El número de vecinos debe ser mayor a 0.");

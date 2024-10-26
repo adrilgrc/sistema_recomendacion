@@ -1,5 +1,11 @@
 <template>
-  <div>
+  <div v-if="!flag && matrix.length">
+    <button @click="toggleTable">
+      {{ showTable ? 'Ocultar' : 'Mostrar' }} Matriz
+    </button>
+  </div>
+  
+  <div v-if="showTable">
     <MatrixDisplay
       :matrix="cosineMatrix"
       :flag="flag"
@@ -25,13 +31,19 @@ export default {
   data() {
     return {
       cosineMatrix: [],
-      flag: false
+      flag: false,
+      showTable: false // Controla si la tabla debe mostrarse o no
     };
   },
   mounted() {
     this.calculateCosineDistance();
   },
   methods: {
+    // Alternar la visibilidad de la tabla
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
+    
     calculateCosineDistance() {
       this.flag = false; // Reiniciar el flag de forma que entiendo que todos los valores son validos en este momento
       

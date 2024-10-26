@@ -2,7 +2,14 @@
   <div>
     <h4 v-if="flag">No es un número válido de vecinos</h4>
     <h4 v-if="!flag">Predicción Simple</h4>
+    <!-- Mostrar/ocultar botón si hay predicciones y no hay error -->
     <div v-if="!flag && prediction.length">
+      <button @click="toggleTable">
+        {{ showTable ? 'Ocultar' : 'Mostrar' }} Predicciones
+      </button>
+    </div>
+
+    <div v-if="showTable && !flag && prediction.length">
       <table>
         <thead>
           <tr>
@@ -22,9 +29,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div v-else>
-      <p>No hay predicciones disponibles.</p>
     </div>
   </div>
 </template>
@@ -48,13 +52,17 @@ export default {
 	data() {
     return {
       prediction: [],
-      flag: false
+      flag: false,
+      showTable: false
     };	
 	},
 	mounted() {
     this.calculateSimplePrediction();
 	},
 	methods: {
+    toggleTable() {
+      this.showTable = !this.showTable; // Alterna la visibilidad de la tabla
+    },
     calculateSimplePrediction() {
       if (this.numNeighbors <= 0 || !this.isNumeric(this.numNeighbors) || this.numNeighbors > this.utilityMatrix.length - 1) {
         // this.flag = ("El número de vecinos debe ser mayor a 0.");

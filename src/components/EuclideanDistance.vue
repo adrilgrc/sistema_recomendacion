@@ -2,7 +2,15 @@
   <div>
     <h4 v-if="flag">Alguno de los valores de la matriz de similitud está fuera del rango permitido</h4>
     <h4 v-if="!flag">Matriz de Distancia Euclídea</h4>
-    <table v-if="!flag && euclideanMatrix.length">
+
+    <!-- Botón para mostrar/ocultar la tabla si no hay error y la matriz está disponible -->
+    <div v-if="!flag && euclideanMatrix.length">
+      <button @click="toggleTable">
+        {{ showTable ? 'Ocultar' : 'Mostrar' }} Matriz
+      </button>
+    </div>
+
+    <table v-if="showTable && !flag && euclideanMatrix.length">
       <thead>
         <tr>
           <th>Usuario</th>
@@ -31,13 +39,19 @@ export default {
   data() {
     return {
       euclideanMatrix: [],
-      flag: false
+      flag: false,
+      showTable: false      // Controla si la tabla debe mostrarse o no
     }
   },
   mounted() {
     this.calculateEuclideanDistance();
   },
   methods: {
+    // Alternar la visibilidad de la tabla
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
+    
     calculateEuclideanDistance() {
       this.flag = false; // Reset the flag so I understand that all values are valid at this point
       const { minValue, maxValue, userRows } = parseInputData(this.content);

@@ -1,11 +1,22 @@
 <template>
-  <div>
+  
+  <!-- Botón para mostrar/ocultar la tabla si no hay error y la matriz está disponible -->
+  <div v-if="!flag && matrix.length">
+    <button @click="toggleTable">
+      {{ showTable ? 'Ocultar' : 'Mostrar' }} Matriz
+    </button>
+  </div>
+
+  <div v-if="showTable">
     <MatrixDisplay
       :matrix="matrix"
       :flag="flag"
       title="Matriz de Similitud de Correlación de Pearson"
     />
   </div>
+
+
+
 </template>
 
 <script>
@@ -27,12 +38,18 @@ export default {
     return {
       matrix: [],
       flag: false,
+      showTable: false // Controla si la tabla debe mostrarse o no
     };
   },
   mounted() {
     this.calculatePearsonCorrelation();
   },
   methods: {
+    // Alternar la visibilidad de la tabla
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
+    
     calculatePearsonCorrelation() {
       this.flag = false; // Reiniciar el flag de forma que entiendo que todos los valores son validos en este momento
       // Usar la función de utilidades
