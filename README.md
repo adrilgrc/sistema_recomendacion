@@ -115,9 +115,31 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
     - *emitSelection*: El método es llamado cada vez que el usuario cambia una de las opciones (métrica, vecinos, tipo de predicción).
       - Emite un evento *updateMetrics* con las selecciones actuales (selectedMetric, selectedPredictionType y numNeighbors), lo que permite que el componente padre actualice su configuración de cálculo.
 
-
-
 ### CorrelationPearson
+- Se encarga de calcular y mostrar la matriz de similitud basada en la correlación de Pearson a partir de los datos de entrada proporcionados en la matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
+- La interfaz (*template*):
+  - Botón para mostrar/ocultar la matriz: Se muestra un botón que permite alternar entre mostrar y ocultar la tabla de la matriz de similitud (“Mostrar Matriz” y “Ocultar Matriz”), siempre y cuando se cumplan las siguientes condiciones:
+    - No haya errores (*flag* sea false).
+    - La matriz no esté vacía (*matrix.length* > 0).
+  - Si *showTable* es true (se cliqueó sobre 'Mostrar' en el botón), se muestra *MatrixDisplay* con la matriz de similitud (matrix) y el título "Matriz de Similitud de Correlación de Pearson".
+  - *MatrixDisplay* recibe también el estado flag, que indica si la matriz tiene valores fuera de rango.
+- El *script*:
+  - **Props**:
+    - *content*: es de tipo String y es obligatorio.
+  - **Data**:
+    - *matrix*: Array vacío que almacenará la matriz de similitud calculada mediante la correlación de Pearson.
+    - *flag*: Indicador que se activa (`true`) si la matriz contiene valores fuera del rango permitido.
+    - *showTable*: Booleano que controla la visibilidad de la tabla.
+  - **Components**:
+    - Importa y registra el componente *MatrixDisplay* para mostrar la matriz de similitud cuando *showTable* es true.
+  -  **Methods**:
+    - *toggleTable*: Alterna el valor de *showTable* entre true y false, controlando la visibilidad de la tabla.
+    - *calculatePearsonCorrelation*: Calcula la matriz de similitud de Pearson en función de la matriz de utilidad.
+      - Utiliza *parseInputData()* para desglosar el contenido en sus valores mínimos (*minValue*), máximos (*maxValue*) y filas de usuarios (*userRows*).
+      - Itera sobre *userRows* para calcular las correlaciones entre cada par de usuarios. La correlación se calcula solo si los valores están dentro del rango permitido (definido por *minValue* y *maxValue*).
+      - Almacena la correlación entre cada par de usuarios en la matriz, siendo 1 para la diagonal (correlación de cada usuario consigo mismo).
+      - Si el denominador es 0 o si hay valores fuera de rango, el valor en la matriz se define como `null`, y *flag* se activa.
+      - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *matrix* como la matriz de similitud de Pearson.
 
 ### CosineDistance
 
