@@ -33,7 +33,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
 
-
 ## Descripción del código 
 ### Organización en ficheros
 El programa se ha agrupado en una serie de componentes separados en diferentes ficheros:
@@ -216,10 +215,9 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
         - Donde a y b son los valores de cada par correspondiente entre los usuarios.
 
 ### SimplePrediction
-- Calcula y muestra la predicción simple para cada usuario e ítem, basándose en la matriz de utilidad y la matriz de similitud proporcionadas. Además, predice los valores que faltan en la matriz de utilidad en función de los vecinos más cercanos del usuario.
+- Calcula y muestra la predicción simple para cada usuario e ítem, basándose en la matriz de utilidad y la matriz de similitud. Además, predice los valores que faltan en la matriz de utilidad en función de los vecinos más cercanos del usuario.
 - Posee una estructura muy similar al resto de componentes, así que se resaltarán las diferencias.
 - La interfaz (template):
-- El script:
   - Como en el resto de componentes, cuenta con un botón para mostrar/ocultar la matriz.
   - Si el número de vecinos (*numNeighbors*) no es válido, se muestra el mensaje "No es un número válido de vecinos".
   - Si no hay errores, se muestra el título "Predicción Simple".
@@ -245,14 +243,46 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
           - Selección de Vecinos:
             - Se ordenan los vecinos en función de la similitud en *similarityMatrix* con el usuario actual (i).
             - Filtra a los vecinos que tienen similitud distinta de `null` y selecciona los *numNeighbors* más similares.
-          - Cálculo de la Predicción:
           - Calcula la predicción siguiendo la fórmula
             - Si la suma de las similitudes es diferente de 0, la predicción es el promedio ponderado.
             - En caso contrario, la predicción se establece en 0.
         - Se asigna la matriz *prediction* calculada.
 
 ### DifferenceAverage
-
+- Calcula y muestra la predicción basada en la diferencia con la media para cada usuario e ítem, utilizando la matriz de utilidad y la matriz de similitud. Además, predice los valores que faltan por definir en la matriz de utilidad ajustando la predicción de acuerdo a la diferencia con la media de los valores conocidos de los vecinos.
+- Posee una estructura muy similar al resto de componentes, así que se resaltarán las diferencias.
+ - La interfaz (template):
+  - Como en el resto de componentes, cuenta con un botón para mostrar/ocultar la matriz.
+  - Si el número de vecinos (*numNeighbors*) no es válido, se muestra el mensaje "No es un número válido de vecinos".
+  - Si no hay errores, se muestra el título "Predicción Simple".
+  - **Props**:
+    - *numNeighbors*: El número de vecinos que se considerarán para calcular las predicciones (debe ser un número positivo y menor que el número de usuarios).
+    - *utilityMatrix*: La matriz de utilidad.
+    - *similarityMatrix*: La matriz de similitud entre usuarios.
+  - **Data**:
+    - *prediction*: Array vacío que almacenará las predicciones calculadas para cada usuario e ítem.
+    - *flag*.
+    - *showTable*.
+  -  **Methods**:
+    - *toggleTable*.
+    - *calculateDifferenceAveragePrediction*: Calcula las predicciones para los valores faltantes en la matriz de utilidad, ajustando según la media de los vecinos más cercanos.
+      - Se verifica que *numNeighbors* sea un número válido, es decir, que sea positivo y menor que el número total de usuarios en *utilityMatrix*.
+        - Si *numNeighbors* no es válido, activa *flag* y sale del método sin hacer cálculos.
+      - Se crea una matriz *prediction* del mismo tamaño que *utilityMatrix* para almacenar los resultados de predicción.
+      - Cálculo de Predicciones:
+        - Se itera sobre cada usuario (i) y cada ítem (j):
+        - Si el valor ya está disponible en *utilityMatrix[i][j]* (es decir, no es `null`), se copia en *prediction* sin cambios.ç
+        - Si el valor es `null`, se realiza la predicción:
+          - Selección de Vecinos:
+            - Se ordenan los vecinos en función de la similitud en *similarityMatrix* con el usuario actual (i).
+            - Filtra a los vecinos que tienen similitud distinta de `null` y selecciona los *numNeighbors* más similares.
+          - Calcula la predicción siguiendo la fórmula
+            - Calcula el promedio de las calificaciones del usuario (*AverageUser(i)*) y ajusta cada valor vecino usando su diferencia respecto a su propia media (*AverageUser(user)*).
+            - Si la suma de las similitudes es diferente de 0, la predicción es el promedio ponderado; de lo contrario, se establece en la media del usuario i.
+        - Se asigna la matriz *prediction* calculada.
+        - *AverageUser*:
+          - Calcula la media de las calificaciones conocidas de un usuario en *utilityMatrix*.
+          - Filtra las calificaciones null y calcula la media de los ítems calificados, devolviendo este valor como la media del usuario.
 
 ## Ejemplo de uso
 
