@@ -141,10 +141,11 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
       - El número de usuarios (*numUsers*) se obtiene a partir del número de elementos de *userRows*.
         - Con dicho número, se crea una matriz de ceros, de dimensiones *numUsers* x *numUsers*, llamada *matrix*, que almacenará la similitud entre los distintos usuarios (las distancias).
       - Se itera sobre *userRows* para calcular las correlaciones entre cada par de usuarios. La correlación se calcula solo si los valores están dentro del rango permitido (definido por *minValue* y *maxValue*).
+      - Si algún valor está fuera de rango, se devuelve `null` y se activa la variable *flag* para indicar que ocurrió un error.
+      - Si las valoraciones son válidas y no tienen valores nulos, la función crea una lista de pares de valoraciones *validPairs* de cada determinado ítem, siendo cada elemento del par la valoración de cada usuario del par.
       - Almacena la correlación entre cada par de usuarios en la matriz, siendo 1 para la diagonal (correlación de cada usuario consigo mismo).
-      - Si el denominador es 0 o si hay valores fuera de rango, el valor en la matriz se define como `null`, y *flag* se activa.
       - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *matrix* como la matriz de similitud de Pearson.
-  
+       
 ### CosineDistance
 - Es responsable de calcular y mostrar la matriz de similitud basada en la distancia coseno a partir de los datos de entrada proporcionados en una matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
 - Posee una estructura muy similar a *CorrelationPearson*, así que se resaltarán las diferencias:
@@ -163,8 +164,10 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
   - **Methods**:
     - *toggleTable*.
     - *calculateCosineDistance*: Calcula la matriz de similitud de distancia coseno en función de la matriz de utilidad proporcionada.
+      - Se resetea *flag*.
       - Emplea `parseInputData()`.
       - Itera sobre *userRows*.
+      - Se obtiene el número de usuarios *numUsers*.
       - Para el cálculo de similitud coseno:
         - Se calcula el producto entre los valores de cada par de usuarios.
         - Se calculan las magnitudes de los vectores de cada usuario.
@@ -174,6 +177,35 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
       - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *cosineMatrix* como la matriz de similitud de distancia coseno.
 
 ### EuclideanDistance
+- Calcula y muestra la matriz de similitud basada en la distancia euclidiana a partir de los datos de entrada proporcionados en una matriz de utilidad.
+- Posee una estructura muy similar al resto de métricas, así que se resaltarán las diferencias:
+- La interfaz (*template*):
+  - Como en el resto de métricas, se cuenta con un botón para mostrar/ocultar la matriz.
+- El *script*:
+ - **Props**:
+    - *content*: es de tipo String y es obligatorio.
+      - Contiene los datos de la matriz de utilidad, en formato de texto, que serán procesados para el cálculo de la matriz de similitud.
+  - **Data**:
+    - *euclideanMatrix*: Array vacío que almacenará la matriz de similitud calculada mediante la distancia euclídea.
+    - *flag*.
+    - *showTable*.
+  - **Methods**:
+    - *toggleTable*.
+    - *calculateEuclideanDistance*: Calcula la matriz de similitud basada en la distancia euclídea entre cada par de usuarios.
+      - Se resetea *flag*.
+      - Emplea `parseInputData()`.
+      - Itera sobre *userRows*.
+      - Se obtiene el número de usuarios *numUsers*.
+      - Para el cálculo de similitud euclídea:
+        - Se crea una matriz de *numUsers* x *numUsers* inicializada en 0, que se usará para almacenar las distancias euclidianas entre cada par de usuarios.
+        - Se itera sobre todos los pares de usuarios en *userRows*, tomando cada par de usuarios.
+        - Si ambos usuarios son iguales (i === j), la distancia se define como 0 (la distancia de un usuario consigo mismo).
+        - Para cada par de usuarios distintos, se llama al método *euclideanSimilarityByPair*, que calcula la distancia entre ambos.
+        - El resultado se almacena en `matrix[i][j]` y `matrix[j][i]`, asegurando que la matriz sea simétrica.
+      - Se actualiza *euclideanMatrix* con la matriz calculada y se emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *euclideanMatrix* como la matriz de similitud basada en la distancia euclidiana.
+    - *euclidean...*
+
+          
 
 
 ### SimplePrediction
