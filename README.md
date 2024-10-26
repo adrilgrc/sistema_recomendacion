@@ -126,6 +126,7 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
 - El *script*:
   - **Props**:
     - *content*: es de tipo String y es obligatorio.
+      - Contiene los datos de la matriz de utilidad, en formato de texto, que serán procesados para el cálculo de la matriz de similitud.
   - **Data**:
     - *matrix*: Array vacío que almacenará la matriz de similitud calculada mediante la correlación de Pearson.
     - *flag*: Indicador que se activa (`true`) si la matriz contiene valores fuera del rango permitido.
@@ -142,8 +143,35 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
       - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *matrix* como la matriz de similitud de Pearson.
 
 ### CosineDistance
+- Es responsable de calcular y mostrar la matriz de similitud basada en la distancia coseno a partir de los datos de entrada proporcionados en una matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
+- Posee una estructura muy similar a *CorrelationPearson*, así que se resaltarán las diferencias:
+- La interfaz (*template*):
+  - Al igual que *CorrelationPearson* cuenta con un botón para mostrar/ocultar la matriz, con las mismas condiciones mencionadas en el anterior apartado.
+- El *script*:
+  - **Props**:
+    - *content*: es de tipo String y es obligatorio.
+      - Contiene los datos de la matriz de utilidad, en formato de texto, que serán procesados para el cálculo de la matriz de similitud.
+  - **Data**:
+    - *cosineMatrix*: Array vacío que almacenará la matriz de similitud calculada mediante la distancia coseno.
+    - *flag*.
+    - *showTable*.
+  - **Components**:
+    - *MatrixDisplay*.
+  - **Methods**:
+    - *toggleTable*.
+    - *calculateCosineDistance*: Calcula la matriz de similitud de distancia coseno en función de la matriz de utilidad proporcionada.
+      - Emplea `parseInputData()`.
+      - Itera sobre *userRows*.
+      - Para el cálculo de similitud coseno:
+        - Se calcula el producto entre los valores de cada par de usuarios.
+        - Se calculan las magnitudes de los vectores de cada usuario.
+        - La distancia coseno es el cociente entre el producto punto y el producto de las magnitudes.
+        - Si hay valores fuera de rango o el denominador es 0, asigna null a ese valor en la matriz y activa flag.
+        - La matriz resultante almacena las distancias coseno, con 1 en la diagonal para la similitud de un usuario consigo mismo y simetría entre posiciones (i,j) y (j,i).
+      - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *cosineMatrix* como la matriz de similitud de distancia coseno.
 
 ### EuclideanDistance
+
 
 ### SimplePrediction
 
