@@ -309,9 +309,9 @@ Para ejecutar el programa se debe iniciar en una terminal "npm run serve", a con
 Una vez en el navegador web:
 - Se debe adjuntar un archivo que contenga la matriz de utilidad (1)
 - Se debe seleccionar la métrica deseada (2) de las opciones posibles:
--- Correlación de Pearson
--- Distancia coseno
--- Distancia euclídea
+  - Correlación de Pearson
+  - Distancia coseno
+  - Distancia euclídea
 - Se debe introducir el número de vecinos (3)
 - Se debe seleccionar el tipo de predicción (4) de las opciones posibles:
   - Predicción simple
