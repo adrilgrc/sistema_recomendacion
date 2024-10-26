@@ -2,7 +2,15 @@
   <div>
     <h4 v-if="flag">Alguno de los valores de la matriz de similitud está fuera del rango permitido</h4>
     <h4 v-if="!flag">{{ title }}</h4>
-    <table v-if="!flag && matrix.length">
+
+    <!-- Botón para mostrar/ocultar la tabla si no hay error y la matriz está disponible -->
+    <div v-if="!flag && matrix.length">
+      <button @click="toggleTable">
+        {{ this.showTable ? 'Ocultar' : 'Mostrar' }} Matriz
+      </button>
+    </div>
+
+    <table v-if="this.showTable && !flag && matrix.length && matrix">
       <thead>
         <tr>
           <th>Usuario</th>
@@ -35,6 +43,17 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      showTable: false, // Controla si la tabla debe mostrarse o no
+    };
+  },
+  methods: {
+    // Alternar la visibilidad de la tabla
+    toggleTable() {
+      this.showTable = !this.showTable;
+    },
+  },
 };
 </script>
 
@@ -50,4 +69,67 @@ th, td {
   padding: 8px;
   text-align: center;
 }
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db; /* Color de fondo azul */
+  color: #fff; /* Texto en blanco */
+  font-size: 16px;
+  border-radius: 5px; /* Bordes redondeados */
+  cursor: pointer; /* Cambia el cursor a puntero */
+  transition: background-color 0.3s ease; /* Transición suave al pasar el ratón */
+}
+
+.custom-file-upload:hover {
+  background-color: #2980b9; /* Color de fondo más oscuro cuando el ratón está encima */
+}
+
+/* Estilos del contenedor y del input de archivo */
+.file-container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+}
+
+input[type="file"] {
+  display: none; /* Ocultar input de archivo */
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.custom-file-upload:hover {
+  background-color: #2980b9;
+}
+
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #3498db;
+  color: #fff;
+  font-size: 16px;
+  border-radius: 5px;
+  border-color: #3498db;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.file-output {
+  margin-top: 20px;
+  text-align: left;
+}
+
 </style>
