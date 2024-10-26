@@ -197,15 +197,23 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
       - Itera sobre *userRows*.
       - Se obtiene el número de usuarios *numUsers*.
       - Para el cálculo de similitud euclídea:
-        - Se crea una matriz de *numUsers* x *numUsers* inicializada en 0, que se usará para almacenar las distancias euclidianas entre cada par de usuarios.
+        - Se crea una matriz de *numUsers* x *numUsers* inicializada en 0, que se usará para almacenar las distancias euclídeas entre cada par de usuarios.
         - Se itera sobre todos los pares de usuarios en *userRows*, tomando cada par de usuarios.
         - Si ambos usuarios son iguales (i === j), la distancia se define como 0 (la distancia de un usuario consigo mismo).
         - Para cada par de usuarios distintos, se llama al método *euclideanSimilarityByPair*, que calcula la distancia entre ambos.
         - El resultado se almacena en `matrix[i][j]` y `matrix[j][i]`, asegurando que la matriz sea simétrica.
-      - Se actualiza *euclideanMatrix* con la matriz calculada y se emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *euclideanMatrix* como la matriz de similitud basada en la distancia euclidiana.
-    - *euclidean...*
-
-          
+      - Se verifica si existe algún valor en la matriz (*matrix*) que sea `null`. Si encuentra al menos uno, establece *flag* como true. En caso contrario, *flag* continua como false.
+      - Se actualiza *euclideanMatrix* con la matriz calculada y se emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *euclideanMatrix* como la matriz de similitud basada en la distancia euclídea.
+    - *euclideanSimilarityByPair*: Calcula la distancia euclídea entre dos usuarios (*userAValues* y *userBValues*) en función de sus valores, siempre y cuando estén dentro de un rango permitido (*minValue* y *maxValue*).
+      - Se comienza validando el rango de valores:
+        - Se verifica si algún valor en *userAValues* o *userBValues* está fuera del rango permitido, es decir, si es menor que *minValue* o mayor que *maxValue*. Si se encuentra algún valor fuera de rango:
+         - Se activa *flag* para indicar que hay un error.
+         - El método retorna `null`, lo cual señala que la distancia no puede ser calculada para este par de usuarios.
+      - Se filtran los valores `null` en ambas listas de valores (*userAValues* y *userBValues*), creando pares solo con valores válidos.
+        - *validPairs* contiene únicamente aquellos pares de valores en los que tanto x como y no son `null`.
+      - En caso de no encontrar pares válidos (*validPairs* está vacío), el método retorna `null`, indicando que no hay suficiente información para calcular la distancia entre los dos usuarios.
+      - Se calcula la suma de los cuadrados de las diferencias entre los valores de cada par (`sqrt(sum((a - b)^2))`).
+        - Donde a y b son los valores de cada par correspondiente entre los usuarios.
 
 
 ### SimplePrediction
