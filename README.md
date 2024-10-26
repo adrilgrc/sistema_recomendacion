@@ -45,6 +45,7 @@ El programa se ha agrupado en una serie de componentes separados en diferentes f
 - EuclideanDistance.vue: Se desarrolla una nueva matriz basada en la Distancia Euclídea
 - SimplePrediction.vue: Se desarrolla una nueva matriz basada en la Predicción Simple
 - DifferenceAverage.vue: Se desarrolla una nueva matriz basada en la Diferencia con la media
+- MatrixDisplay.vue: Muestra la matriz de similitud en formato de tabla.
   
 La estructura empleada permite la modularidad del programa, favoreciendo las posibles futuras necesidades de escalabilidad. 
 
@@ -144,7 +145,24 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
       - Si las valoraciones son válidas y no tienen valores nulos, la función crea una lista de pares de valoraciones *validPairs* de cada determinado ítem, siendo cada elemento del par la valoración de cada usuario del par.
       - Almacena la correlación entre cada par de usuarios en la matriz, siendo 1 para la diagonal (correlación de cada usuario consigo mismo).
       - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *matrix* como la matriz de similitud de Pearson.
-       
+
+### MatrixDisplay
+- Se encarga de mostrar la matriz de similitud en formato de tabla. Se emplea en varios componentes para mostrar las matrices de similitud calculadas. 
+- Es un recurso para centralizar una tarea repetitiva en muchos componentes del programa.
+- La interfaz (*template*):
+  - Si la bandera *flag* es true (lo que indica que hay valores fuera del rango), se muestra el mensaje "Alguno de los valores de la matriz de similitud está fuera del rango permitido".
+  - En el caso de que no haya errores (*flag* es `false`), se muestra el título proporcionado a través de la propiedad title.
+  - Matriz de similitud:
+    - Solo se muestra si *flag* es `false` y *matrix* tiene datos.
+    - Cada fila corresponde a un usuario, y cada columna muestra la similitud entre el usuario de la fila y el usuario de la columna.
+    - Los valores de la matriz se muestran redondeados a 4 decimales.
+    - Los valores null se muestran como "N/A".
+- El *script*:
+  - **Props**:
+    - *matrix*: La matriz de similitud que se va a mostrar. Es un array bidimensional que contiene los valores de similitud entre pares de usuarios.
+    - *flag*: Indica si la matriz tiene valores fuera del rango permitido. Si es true, se muestra el mensaje de advertencia y la tabla no se muestra.
+    - *title*: Un String que representa el título de la tabla. Este título es dinámico y depende de la métrica de similitud (por ejemplo, "Matriz de Distancia Euclidiana", "Matriz de Similitud de Pearson",...).
+
 ### CosineDistance
 - Es responsable de calcular y mostrar la matriz de similitud basada en la distancia coseno a partir de los datos de entrada proporcionados en una matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
 - Posee una estructura muy similar a *CorrelationPearson*, así que se resaltarán las diferencias:
