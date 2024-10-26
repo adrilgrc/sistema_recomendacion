@@ -92,12 +92,30 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
       - *downloadSimilarityMatrix*: Muestra cuál es la métrica elegida, el número de vecinos, tipo de predicción, la matriz de similitud y los vecinos seleccionados para cada usuario, junto con las valoraciones para cada uno de los ítems, en un archivo .txt.
 
 
-
-- Los estilos (*style*):
-  - ..............
-  - 
-
 ### RecommendationMenu
+- La función está diseñada para permitir al usuario seleccionar la métrica de similitud, el tipo de predicción y el número de vecinos necesarios para realizar cálculos a partir de una matriz de utilidad.
+
+- La interfaz (*template*):
+  - Se muestra el título "Selecciona la métrica y el tipo de predicción".
+  - Tipo de Métrica (*selectedMetric*):
+    - Se presenta un menú desplegable de opciones que permite al usuario seleccionar la métrica de similitud (Pearson, Coseno, o Euclidiana) que desea obtener.
+  - Número de vecinos (*neighbors*): 
+    - Un campo de entrada permite al usuario definir el número de vecinos (se establece un mínimo de 1).
+  - Tipo de predicción (*predictionType*):
+    - Un segundo menú desplegable permite elegir entre predicciones simples o basadas en la diferencia con la media.
+  - Visualización de las opciones escogidas:
+    - Se muestra un cuadro de texto con un resumen de las opciones seleccionadas (métrica, número de vecinos y tipo de predicción).
+    - En caso de que no se seleccionen opciones, se muestran valores predeterminados ("Ninguna seleccionada" o "No especificado").
+- El *script*:
+  - **Data**:
+    - *selectedMetric*: Guarda el nombre de la métrica de similitud seleccionada (inicialmente vacía).
+    - *selectedPredictionType*: Guarda el nombre del tipo de predicción seleccionada (inicialmente vacío).
+    - *numNeighbors*: Almacena el número de vecinos introducido por el usuario (inicialmente null).
+  - **Methods**:
+    - *emitSelection*: El método es llamado cada vez que el usuario cambia una de las opciones (métrica, vecinos, tipo de predicción).
+      - Emite un evento *updateMetrics* con las selecciones actuales (selectedMetric, selectedPredictionType y numNeighbors), lo que permite que el componente padre actualice su configuración de cálculo.
+
+
 
 ### CorrelationPearson
 
