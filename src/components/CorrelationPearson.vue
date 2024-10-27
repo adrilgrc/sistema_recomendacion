@@ -56,22 +56,14 @@ export default {
         if (validPairs.length === 0) return null;
         
         const n = validPairs.length;
-        console.log("N: ", n);
         const sumX = validPairs.reduce((acc, [x]) => acc + x, 0);
         const sumY = validPairs.reduce((acc, [, y]) => acc + y, 0);
         const sumXY = validPairs.reduce((acc, [x, y]) => acc + x * y, 0);
         const sumX2 = validPairs.reduce((acc, [x]) => acc + x * x, 0);
         const sumY2 = validPairs.reduce((acc, [, y]) => acc + y * y, 0);
-        console.log("SumX: ", sumX);
-        console.log("SumY: ", sumY);
-        console.log("SumXY: ", sumXY);
-        console.log("SumX2: ", sumX2);
-        console.log("SumY2: ", sumY2);
 
         const numerator = n * sumXY - sumX * sumY;
         const denominator = Math.sqrt((n * sumX2 - sumX ** 2) * (n * sumY2 - sumY ** 2));
-        console.log("Numerator: ", numerator);
-        console.log("Denominator: ", denominator);
         if (denominator === 0) return null;
         return numerator / denominator;
       };
@@ -82,13 +74,10 @@ export default {
           if (i === j) {
             matrix[i][j] = 1;
           } else if (matrix[i][j] < -1 || matrix[i][j] > 1) {
-            console.log("Matrix[i][j]: ", matrix[i][j]);
             matrix[i][j] = null;
             matrix[j][i] = null;
           } else {
             const correlation = calculatePearson(userRows[i], userRows[j]);
-            console.log("Correlation: ", correlation);
-            console.log("Calculatedpearson: ", calculatePearson(userRows[i], userRows[j]));
             matrix[i][j] = correlation;
             matrix[j][i] = correlation;
           }

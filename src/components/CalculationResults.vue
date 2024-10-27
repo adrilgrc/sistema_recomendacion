@@ -162,7 +162,6 @@ export default {
         matrixText += row.map(value => (value !== null ? value.toFixed(4) : 'N/A')).join(' | ');
         matrixText += '\n';
       });
-      console.log("pares: ", this.pares);
       matrixText += '\nConjunto de pares de usuarios:\n';
       
       for (let i = 0; i < this.pares.length; i++) {
