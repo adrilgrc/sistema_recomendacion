@@ -180,7 +180,7 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
 - Es responsable de calcular y mostrar la matriz de similitud basada en la distancia coseno a partir de los datos de entrada proporcionados en una matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
 - Posee una estructura muy similar a *CorrelationPearson*, así que se resaltarán las diferencias:
 - La interfaz (*template*):
-  - Al igual que *CorrelationPearson* cuenta con un botón para mostrar/ocultar la matriz, con las mismas condiciones mencionadas en el anterior apartado.
+  - Al igual que *CorrelationPearson* cuenta con una serie de condiciones para mostrar *MatrixDisplay* con la matriz de similitud (matrix) y el título "Matriz de Similitud de Correlación de Distancia Coseno".
 - El *script*:
   - **Props**:
     - *content*: es de tipo String y es obligatorio.
@@ -188,11 +188,9 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
   - **Data**:
     - *cosineMatrix*: Array vacío que almacenará la matriz de similitud calculada mediante la distancia coseno.
     - *flag*.
-    - *showTable*.
   - **Components**:
     - *MatrixDisplay*.
   - **Methods**:
-    - *toggleTable*.
     - *calculateCosineDistance*: Calcula la matriz de similitud de distancia coseno en función de la matriz de utilidad proporcionada.
       - Se resetea *flag*.
       - Emplea `parseInputData()`.
@@ -210,7 +208,7 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
 - Calcula y muestra la matriz de similitud basada en la distancia euclidiana a partir de los datos de entrada proporcionados en una matriz de utilidad.
 - Posee una estructura muy similar al resto de métricas, así que se resaltarán las diferencias:
 - La interfaz (*template*):
-  - Como en el resto de métricas, se cuenta con un botón para mostrar/ocultar la matriz.
+  - Como en el resto de métricas, se cuenta con una serie de condiciones para mostrar *MatrixDisplay* con la matriz de similitud (matrix) y el título "Matriz de Similitud de Correlación de Distancia Euclídea".
 - El *script*:
  - **Props**:
     - *content*: es de tipo String y es obligatorio.
@@ -218,9 +216,7 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
   - **Data**:
     - *euclideanMatrix*: Array vacío que almacenará la matriz de similitud calculada mediante la distancia euclídea.
     - *flag*.
-    - *showTable*.
   - **Methods**:
-    - *toggleTable*.
     - *calculateEuclideanDistance*: Calcula la matriz de similitud basada en la distancia euclídea entre cada par de usuarios.
       - Se resetea *flag*.
       - Emplea `parseInputData()`.
@@ -234,6 +230,7 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
         - El resultado se almacena en `matrix[i][j]` y `matrix[j][i]`, asegurando que la matriz sea simétrica.
       - Se verifica si existe algún valor en la matriz (*matrix*) que sea `null`. Si encuentra al menos uno, establece *flag* como true. En caso contrario, *flag* continua como false.
       - Se actualiza *euclideanMatrix* con la matriz calculada y se emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *euclideanMatrix* como la matriz de similitud basada en la distancia euclídea.
+      - Emite el evento *matrixComputed* al componente padre, pasando *userRows* como la matriz de utilidad y *euclideanMatrix* como la matriz de similitud de distancia euclídea.
     - *euclideanSimilarityByPair*: Calcula la distancia euclídea entre dos usuarios (*userAValues* y *userBValues*) en función de sus valores, siempre y cuando estén dentro de un rango permitido (*minValue* y *maxValue*).
       - Se comienza validando el rango de valores:
         - Se verifica si algún valor en *userAValues* o *userBValues* está fuera del rango permitido, es decir, si es menor que *minValue* o mayor que *maxValue*. Si se encuentra algún valor fuera de rango:
