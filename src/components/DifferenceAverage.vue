@@ -36,7 +36,6 @@ export default {
     return {
       prediction: [],
       flag: false,
-      showTable: false // Controla si la tabla debe mostrarse o no
     };
   },
   mounted() {
