@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { isNumeric } from '@/utils/utils';
 export default {
   props: {
     numNeighbors: {
@@ -49,6 +50,10 @@ export default {
 			type: Array,
 			required: true
 		},
+    prediction: {
+      type: Array,
+      required: true
+    },
     predictionTypeStr: {
       type: String,
       required: true
@@ -56,7 +61,6 @@ export default {
   },
   data() {
     return {
-      prediction: [],
       flag: false,
       showTable: false // Controla si la tabla debe mostrarse o no
     };
@@ -65,7 +69,8 @@ export default {
     // Alternar la visibilidad de la tabla
     toggleTable() {
       this.showTable = !this.showTable;
-    }
+    },
+    isNumeric
   }
 };
 </script>

@@ -171,14 +171,14 @@ export default {
         }
         matrixText += '\n';
         if (this.selectedPredictionType === 'simple') {
-          matrixText += `SUMATORIO( similitud(a,b) * puntuacion(b,i)) = ${this.pares[i][2].toFixed(4)}\n`;
-          matrixText += `abs(SUMATORIO(similitud(a,b)) ) = ${this.pares[i][3].toFixed(4)}\n`; 
-          matrixText += `Siendo la predicción ${this.pares[i][2].toFixed(4)} / ${this.pares[i][3].toFixed(4)} = ${this.pares[i][4].toFixed(4)}`
+          matrixText += `\tSUMATORIO( similitud(a,b) * puntuacion(b,i)) = ${this.pares[i][2].toFixed(4)}\n`;
+          matrixText += `\tabs(SUMATORIO(similitud(a,b)) ) = ${this.pares[i][3].toFixed(4)}\n`; 
+          matrixText += `\tSiendo la predicción ${this.pares[i][2].toFixed(4)} / ${this.pares[i][3].toFixed(4)} = ${this.pares[i][4].toFixed(4)}`
         } else if (this.selectedPredictionType === 'meanDifference') {
-          matrixText += `Media del usuario ${this.pares[i][0] + 1} es ${this.pares[i][6].toFixed(4)}\n`;
-          matrixText += `SUMATORIO( similitud(a,b) * puntuacion(b) - mediaPuntuaciones(b)) = ${this.pares[i][2].toFixed(4)}\n`;
-          matrixText += `SUMATORIO( similitud(a,b) ) = ${this.pares[i][3].toFixed(4)}\n`;
-          matrixText += `Siendo la predicción ${this.pares[i][2].toFixed(4)} / ${this.pares[i][3].toFixed(4)} = ${this.pares[i][4].toFixed(4)}`
+          matrixText += `\tMedia del usuario ${this.pares[i][0] + 1} es ${this.pares[i][6].toFixed(4)}\n`;
+          matrixText += `\tSUMATORIO( similitud(a,b) * puntuacion(b) - mediaPuntuaciones(b)) = ${this.pares[i][2].toFixed(4)}\n`;
+          matrixText += `\tSUMATORIO( similitud(a,b) ) = ${this.pares[i][3].toFixed(4)}\n`;
+          matrixText += `\tSiendo la predicción ${this.pares[i][2].toFixed(4)} / ${this.pares[i][3].toFixed(4)} = ${this.pares[i][4].toFixed(4)}`
         }
         matrixText += ` para el ítem: ${this.pares[i][5] + 1}\n`;
       }

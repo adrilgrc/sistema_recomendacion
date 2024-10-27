@@ -4,13 +4,20 @@
       :numNeighbors="numNeighbors"
       :utilityMatrix="utilityMatrix"
       :similarityMatrix="similarityMatrix"
-      predictionTypeStr="Simple"
+      :prediction="prediction"
+      predictionTypeStr="Matriz de Predicción Simple"
     />
   </div>
 </template>
 
 <script>
+import { isNumeric } from '@/utils/utils';
+import PredictionDisplay from '@/components/PredictionDisplay.vue';
+
 export default {
+  components: {
+    PredictionDisplay
+  },
   props: {
     numNeighbors: {
       type: Number,
@@ -36,11 +43,8 @@ export default {
     this.calculateSimplePrediction();
 	},
 	methods: {
-    toggleTable() {
-      this.showTable = !this.showTable; // Alterna la visibilidad de la tabla
-    },
     calculateSimplePrediction() {
-      if (this.numNeighbors <= 0 || !this.isNumeric(this.numNeighbors) || this.numNeighbors > this.utilityMatrix.length - 1) {
+      if (this.numNeighbors <= 0 || !isNumeric(this.numNeighbors) || this.numNeighbors > this.utilityMatrix.length - 1) {
         this.flag = true;
         return null;
       }
@@ -76,9 +80,7 @@ export default {
 			this.prediction = prediction;
       this.$emit('prediction', this.prediction, pares);
 		},
-		isNumeric(value) {
-      return !isNaN(parseFloat(value)) && isFinite(value);
-    }
+		
 	}
 };
 </script>
