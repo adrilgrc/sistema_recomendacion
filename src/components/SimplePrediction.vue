@@ -35,8 +35,7 @@ export default {
 	data() {
     return {
       prediction: [],
-      flag: false,
-      showTable: false,
+      flag: false
     };	
 	},
 	mounted() {
