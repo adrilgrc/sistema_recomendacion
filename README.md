@@ -246,35 +246,42 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
 - Calcula y muestra la predicción simple para cada usuario e ítem, basándose en la matriz de utilidad y la matriz de similitud. Además, predice los valores que faltan en la matriz de utilidad en función de los vecinos más cercanos del usuario.
 - Posee una estructura muy similar al resto de componentes, así que se resaltarán las diferencias.
 - La interfaz (template):
-  - Como en el resto de componentes, cuenta con un botón para mostrar/ocultar la matriz.
-  - Si el número de vecinos (*numNeighbors*) no es válido, se muestra el mensaje "No es un número válido de vecinos".
-  - Si no hay errores, se muestra el título "Predicción Simple".
+  - Se muestra PredictionDisplay con la matriz de predicción y el título "Matriz de Predicción Simple".
+  - PredictionDisplay recibe también el número de vecinos que se utilizarán en los cálculos de predicción (*numNeighbors*), la matriz de utilidad (*utilityMatrix*), la matriz de similitud (*similarityMatrix*) y la matriz de predicción (*prediction*).
 - El *script*:
   - **Props**:
     - *numNeighbors*: El número de vecinos que se considerarán para calcular las predicciones (debe ser un número positivo y menor que el número de usuarios).
     - *utilityMatrix*: La matriz de utilidad.
-    - *similarityMatrix*: La matriz de similitud entre usuarios.
   - **Data**:
     - *prediction*: Array vacío que almacenará las predicciones calculadas para cada usuario e ítem.
     - *flag*.
-    - *showTable*.
   -  **Methods**:
     - *toggleTable*.
     - *calculateSimplePrediction*: Calcula las predicciones para los valores faltantes en la matriz de utilidad.
       - Se verifica que *numNeighbors* sea un número válido, es decir, que sea positivo y menor que el número total de usuarios en *utilityMatrix*.
-        - Si *numNeighbors* no es válido, activa *flag* y sale del método sin hacer cálculos.
-      - Se crea una matriz *prediction* del mismo tamaño que *utilityMatrix* para almacenar los resultados de predicción.
+        - Si *numNeighbors* no es válido, activa *flag* y sale del método sin hacer cálculos, devolviendo `null`.
+      - Define el tamaño de *numUsers* (número de usuarios) y *numItems* (número de ítems) basado en las dimensiones de *utilityMatrix*.
+      - Crea una matriz *prediction* del mismo tamaño que *utilityMatrix*, inicializada con ceros, para almacenar las predicciones.
+      - Declara un array *pares* que almacenará información detallada sobre cada predicción calculada.
       - Cálculo de Predicciones:
         - Se itera sobre cada usuario (i) y cada ítem (j):
-        - Si el valor ya está disponible en *utilityMatrix[i][j]* (es decir, no es `null`), se copia en *prediction* sin cambios.ç
+        - Si el valor ya está disponible en *utilityMatrix[i][j]*, es decir, no es `null` (el usuario ya calificó el ítem), se copia en *prediction*, sin cambios.
         - Si el valor es `null`, se realiza la predicción:
           - Selección de Vecinos:
-            - Se ordenan los vecinos en función de la similitud en *similarityMatrix* con el usuario actual (i).
-            - Filtra a los vecinos que tienen similitud distinta de `null` y selecciona los *numNeighbors* más similares.
-          - Calcula la predicción siguiendo la fórmula
-            - Si la suma de las similitudes es diferente de 0, la predicción es el promedio ponderado.
-            - En caso contrario, la predicción se establece en 0.
+            - Para el usuario actual (i), obtiene los vecinos usando *similarityMatrix[i]*.
+            - Crea un array de objetos *neighbors*, donde cada objeto contiene:
+              - *similarity*: La similitud entre el usuario actual (i) y el vecino (u).
+              - *user*: El índice del vecino (u).
+            - Filtra los vecinos con una similitud distinta de `null` y diferentes del usuario actual (i).
+            - Ordena los vecinos por similitud en orden descendente y selecciona los más similares.
+          - Calcula la predicción siguiendo la fórmula.
+            - Calcula la suma de las similitudes absolutas (*sumSimilarities*) de los vecinos seleccionados.
+            - Calcula el promedio ponderado de las calificaciones (*sumRatings*), multiplicando la similitud de cada vecino por la calificación del vecino en el ítem j.
+            - En el caso de que *sumSimilarities* sea distinto de 0, la predicción para *prediction[i][j]* es el promedio ponderado de las calificaciones de los vecinos. De lo contrario, la predicción se establece en 0.
+          - Si *sumRatings* no es 0, se guarda un array en *pares* con los detalles del cálculo de la predicción para el ítem j del usuario i:
         - Se asigna la matriz *prediction* calculada.
+        - Emite el evento *prediction* al componente padre, pasando *prediction* como la matriz de predicciones y *pares* con información detallada de cada predicción y sus vecinos escogidos.
+
 
 ### DifferenceAverage
 - Calcula y muestra la predicción basada en la diferencia con la media para cada usuario e ítem, utilizando la matriz de utilidad y la matriz de similitud. Además, predice los valores que faltan por definir en la matriz de utilidad ajustando la predicción de acuerdo a la diferencia con la media de los valores conocidos de los vecinos.
