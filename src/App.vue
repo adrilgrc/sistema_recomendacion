@@ -54,37 +54,4 @@ export default {
 };
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  text-align: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #74ebd5 0%, #acb6e5 100%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.content-container {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 20px;
-  margin-top: 40px;
-  padding: 20px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.content-container > * {
-  flex: 1;
-  max-width: 400px;
-}
-
-h1 {
-  color: #2c3e50;
-  margin-bottom: 20px;
-}
-</style>
+<style src="@/styles/style.css"></style> <!-- Importa el CSS global -->

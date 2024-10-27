@@ -95,17 +95,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
-}
-
-th, td {
-  border: 1px solid #dee2e6;
-  padding: 8px;
-  text-align: center;
-}
-</style>
