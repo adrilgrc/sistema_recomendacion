@@ -385,9 +385,9 @@ En el recuadro (5) se mostrará las opciones elegidas, es decir, la métrica sel
 ![EjemploUso](/ejemplouso.png)
 
 Si se han proporcionado adecuadamente todos los datos requeridos, en la parte inferior, se mostrarán una serie de botones:
-- Para decidir si mostrar u ocultar la matriz resultante con la métrica seleccionada (6)
-- Para decidir si mostrar u ocultar la matriz resultante con la predicción escogida (7)
-- Para poder descargar un archivo en formato .txt con la matriz de utilidad, los vecinos seleccionados para cada usuario, así como su similitud (8)
+- Para poder descargar un archivo en formato .txt con la matriz de utilidad, los vecinos seleccionados para cada usuario, así como su similitud (6)
+- Para decidir si mostrar u ocultar la matriz resultante con la métrica seleccionada (7)
+- Para decidir si mostrar u ocultar la matriz resultante con la predicción escogida (8)
 
 ![EjemploUso](/ejemplouso2.png)
 
