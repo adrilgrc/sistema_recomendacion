@@ -145,14 +145,15 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
     - *matrix*: La matriz de similitud que se va a mostrar. Es un array bidimensional que contiene los valores de similitud entre pares de usuarios.
     - *flag*: Indica si la matriz tiene valores fuera del rango permitido. Si es true, se muestra el mensaje de advertencia y la tabla no se muestra.
     - *title*: Un String que representa el título de la tabla. Este título es dinámico y depende de la métrica de similitud (por ejemplo, "Matriz de Distancia Euclidiana", "Matriz de Similitud de Pearson",...).
+  - **Data**:
+    - *showTable*: Booleano que controla la visibilidad de la tabla.
+  -  **Methods**:
+    - *toggleTable*: Alterna el valor de *showTable* entre true y false, controlando la visibilidad de la tabla.
 
 ### CorrelationPearson
 - Se encarga de calcular y mostrar la matriz de similitud basada en la correlación de Pearson a partir de los datos de entrada proporcionados en la matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
 - La interfaz (*template*):
-  - Botón para mostrar/ocultar la matriz: Se muestra un botón que permite alternar entre mostrar y ocultar la tabla de la matriz de similitud (“Mostrar Matriz” y “Ocultar Matriz”), siempre y cuando se cumplan las siguientes condiciones:
-    - No haya errores (*flag* sea false).
-    - La matriz no esté vacía (*matrix.length* > 0).
-  - Si *showTable* es true (se cliqueó sobre 'Mostrar' en el botón), se muestra *MatrixDisplay* con la matriz de similitud (matrix) y el título "Matriz de Similitud de Correlación de Pearson".
+  - Si *flag* es false y *matrix* no está vacía, se muestra *MatrixDisplay* con la matriz de similitud (matrix) y el título "Matriz de Similitud de Correlación de Pearson".
   - *MatrixDisplay* recibe también el estado flag, que indica si la matriz tiene valores fuera de rango.
 - El *script*:
   - **Props**:
@@ -161,11 +162,9 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
   - **Data**:
     - *matrix*: Array vacío que almacenará la matriz de similitud calculada mediante la correlación de Pearson.
     - *flag*: Indicador que se activa (`true`) si la matriz contiene valores fuera del rango permitido.
-    - *showTable*: Booleano que controla la visibilidad de la tabla.
   - **Components**:
     - Importa y registra el componente *MatrixDisplay* para mostrar la matriz de similitud cuando *showTable* es true.
   -  **Methods**:
-    - *toggleTable*: Alterna el valor de *showTable* entre true y false, controlando la visibilidad de la tabla.
     - *calculatePearsonCorrelation*: Calcula la matriz de similitud de Pearson en función de la matriz de utilidad.
       - Se comienza reseteando la varaible *flag* para indicar que todas las valoraciones son válidas inicialmente.
       - Se extraen los datos necesarios mediante la función *parseInputData()*, con el objetivo de obtener el valor mínimos (*minValue*), máximo (*maxValue*) y las filas de usuarios (*userRows*), donde cada fila contiene las valoraciones de un usuario determinado.
