@@ -79,8 +79,10 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
   - En **Data** se encuentran las variables internas del componente que se inicializan cuando éste se crea.
       - *utilityMatrix*: Es un array vacío, se inicializará al cargar el componente. Contendrá la matriz de utilidad.
       - *similarityMatrix*: Es un array vacío, se inicializará al cargar el componente. Contendrá la matriz de similitud.
-
-  - En **Computed** se establecen las propiedades computadas, es decir, aquellos valores derivados que dependen de otras propiedades y que se actualizan automáticamente cuando cambian sus dependencias.
+      - *prediction*: Es un array vacío, se inicializará al cargar el componente. Contendrá los resultados de las predicciones calculadas para los valores faltantes en *utilityMatrix*.
+      - *pares*: Es un array vacío, se inicializará al cargar el componente. Contendrá contiene información detallada sobre los pares de usuarios y los vecinos seleccionados, es decir, la similitud entre ellos y otros datos de apoyo para calcular las predicciones (como el sumatorio de similitudes).
+  
+  -  En **Computed** se establecen las propiedades computadas, es decir, aquellos valores derivados que dependen de otras propiedades y que se actualizan automáticamente cuando cambian sus dependencias.
       - *selectedMetric*: El switch permite, en función del valor de selectedMetric, seleccionar el componente correspondiente:
         - Si es 'pearson', devuelve el componente 'PearsonCorrelation'.
         - Si es 'cosine', devuelve el componente 'CosineDistance'.
