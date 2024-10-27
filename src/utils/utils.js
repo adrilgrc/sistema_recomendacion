@@ -19,3 +19,7 @@ export function parseInputData(content) {
     userRows
   };
 }
+
+export function isNumeric(value) {
+  return !isNaN(parseFloat(value)) && isFinite(value);
+}
