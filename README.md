@@ -46,6 +46,7 @@ El programa se ha agrupado en una serie de componentes separados en diferentes f
 - SimplePrediction.vue: Se desarrolla una nueva matriz basada en la Predicción Simple
 - DifferenceAverage.vue: Se desarrolla una nueva matriz basada en la Diferencia con la media
 - MatrixDisplay.vue: Muestra la matriz de similitud en formato de tabla.
+- PredictionDisplay.vue: Muestra la matriz de predicción en formato de tabla.
   
 La estructura empleada permite la modularidad del programa, favoreciendo las posibles futuras necesidades de escalabilidad. 
 
@@ -149,6 +150,37 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
     - *showTable*: Booleano que controla la visibilidad de la tabla.
   -  **Methods**:
     - *toggleTable*: Alterna el valor de *showTable* entre true y false, controlando la visibilidad de la tabla.
+
+### PredictionDisplay
+- Se encarga de mostrar la matriz de predicciones en formato de tabla
+- Es un recurso para centralizar una tarea repetitiva en muchos componentes del programa.
+- La interfaz (*template*):
+  - Si la bandera *flag* es true, el componente muestra un mensaje de error "No es un número válido de vecinos", lo que indica que el valor de *numNeighbors* es incorrecto.
+  - Si *flag* es false, se muestra un título que describe el tipo de predicción, obtenido a través de la propiedad *predictionTypeStr*.
+    - Botón para mostrar/ocultar la tabla de predicciones, con los textos "Mostrar Predicciones" y "Ocultar Predicciones". Se muestra si se cumplen las condiciones:
+      - *flag* es false (no hay errores).
+      - La matriz *prediction* contiene datos (`prediction.length > 0`).
+  - Matriz de predicciones:
+    - Solo se renderiza si:
+      - *flag* es `false`.
+      - *prediction* tiene datos.
+      - *showTable* es true, es decir, se ha cliqueado el botón "Mostrar matriz".
+    - Cada fila corresponde a un usuario, y cada columna muestra la predicción calculada para un ítem en particular.
+    - Si el valor de la celda es numérico, se redondea a 4 decimales utilizando toFixed(4).
+    - Los valores null se muestran como "N/A".
+- El *script*:
+  - **Props**:
+    - *numNeighbors*.
+    - *utilityMatrix*.
+    - *similarityMatrix*.
+    - *prediction*: Array bidimensional que contiene los valores de predicción calculados para cada combinación de usuario e ítem en *utilityMatrix*. Se muestra en la tabla.
+    - *predictionTypeStr*: String que describe el tipo de predicción utilizado. Es obligatorio y se usa para mostrar el título en la interfaz.
+  - **Data**:
+    - *showTable*: Booleano que controla la visibilidad de la tabla.
+    - *flag*.
+  -  **Methods**:
+    - *toggleTable*: Alterna el valor de *showTable* entre true y false, controlando la visibilidad de la tabla.
+    - *isNumeric*: Método importado desde un archivo de utilidades (`@/utils/utils`) que verifica si un valor es numérico.
 
 ### CorrelationPearson
 - Se encarga de calcular y mostrar la matriz de similitud basada en la correlación de Pearson a partir de los datos de entrada proporcionados en la matriz de utilidad. Permite al usuario alternar la visibilidad de la tabla de resultados y notifica al componente padre cuando el cálculo está completo.
