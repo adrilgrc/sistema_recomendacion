@@ -26,18 +26,12 @@ export default {
     return {
       euclideanMatrix: [],
       flag: false,
-      showTable: false      // Controla si la tabla debe mostrarse o no
     }
   },
   mounted() {
     this.calculateEuclideanDistance();
   },
   methods: {
-    // Alternar la visibilidad de la tabla
-    toggleTable() {
-      this.showTable = !this.showTable;
-    },
-    
     calculateEuclideanDistance() {
       this.flag = false; // Reset the flag so I understand that all values are valid at this point
       const { minValue, maxValue, userRows } = parseInputData(this.content);
