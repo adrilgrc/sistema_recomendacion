@@ -88,9 +88,14 @@ La estructura empleada permite la modularidad del programa, favoreciendo las pos
         - Si no coincide con ninguno de estos valores, devuelve null, lo que significa que no se selecciona ningún componente de los contemplados.
   - En **Components**: Se define una lista de componentes importados que el componente actual utilizará en la plantilla.
   - En **Methods**: Se definen los métodos del componente.
-      - *updateMatrices*: El método se encarga de actualizar las matrices de utilidad y similitud y emite un evento (*matrixUpdated*) al componente padre, pasando *utilityMatrix* y *similarityMatrix*.
-      - *downloadSimilarityMatrix*: Muestra cuál es la métrica elegida, el número de vecinos, tipo de predicción, la matriz de similitud y los vecinos seleccionados para cada usuario, junto con las valoraciones para cada uno de los ítems, en un archivo .txt.
-
+      - *updatePrediction*: El método se encarga de actualizar dos propiedades internas (*this.pares* y *this.prediction*) con los datos proporcionados como parámetros (*predictionMatrix* y *pares*). Además, emite un evento llamado *predictionUpdated* al componente padre, enviando los valores actualizados.
+      - *downloadSimilarityMatrix*: Genera y descarga un archivo de texto (.txt) que contiene información sobre:
+        - La métrica de similitud seleccionada.
+        - El número de vecinos.
+        - El tipo de predicción.
+        - La matriz de similitud.
+        - La matriz de utilidad con predicciones.
+        - El conjunto de pares de usuarios con detalles sobre las predicciones calculadas.
 
 ### RecommendationMenu
 - La función está diseñada para permitir al usuario seleccionar la métrica de similitud, el tipo de predicción y el número de vecinos necesarios para realizar cálculos a partir de una matriz de utilidad.
