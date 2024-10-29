@@ -5,7 +5,6 @@ Las dependencias que se deben instalar son las siguientes:
 - vue, se debe poseer una versión igual o superior a la 3.5.12: `npm install vue`
 - core-js, se debe poseer una versión igual o superior a la 3.8.3: `npm install core-js`
 - se debe incluir también @vue/compiler-sfc con 3.5.12 o superior: `npm install @vue/compiler-sfc`
-- angular: `npm install -g @angular/cli`
 
 ### Project setup
 ```
